@@ -1,0 +1,57 @@
+.container {
+    max-height: 95vh; /* Adjust the value as needed */
+    overflow-y: auto;
+}
+
+.main-invoice-form {
+    height: 100%;
+    overflow-y: auto;
+  }
+
+#clientAddress, #clientCityState, #clientPhoneNum, #clientEmail, #slogan{
+    height: 20%;
+    text-align: center;
+
+}
+
+.container .form-control{
+    height: 40%;
+    padding: 10px;
+    text-align: center;
+
+}
+
+#invoiceNumber{
+    width: 40%;
+}
+
+/* .divider #two{
+    width: 75%;
+} */
+
+.main-invoice-form input[type=text]::placeholder{
+    text-align: left;
+}
+
+input .form-control{
+    direction: rtl;
+}
+
+@media screen and (max-height: 1000px) {
+    .container{
+        max-height: 95vh;
+        overflow-y: auto;
+    }
+}
+
+@media screen and (max-width: 1000px){
+    .container{
+        max-width: 100%;
+    }
+}
+
+@media screen and (max-width: 700px){
+    .container, .container form{
+        width: 95%;
+    }
+}
