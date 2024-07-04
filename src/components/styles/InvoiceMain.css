@@ -37,6 +37,10 @@ input .form-control{
     direction: rtl;
 }
 
+#items input[type=text]::placeholder{
+    text-align: left;
+}
+
 @media screen and (max-height: 1000px) {
     .container{
         max-height: 95vh;

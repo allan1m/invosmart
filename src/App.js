@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import Signup from "./components/Signup";
 import Login from "./components/Login";
 import InvoiceMain from "./components/InvoiceMain";
-import InvoiceEdit from "./components/InvoiceEdit";
 import Account from "./components/Account";
 import NoPage from "./components/NoPage";
 import Logout from "./components/Logout";
@@ -40,7 +39,6 @@ function App() {
         <Route path="/Login" element={<Login />}></Route>
         <Route path="/Signup" element={<Signup />}></Route>
         <Route path="/InvoiceMain" element={<InvoiceMain />}></Route>
-        <Route path="/InvoiceEdit" element={<InvoiceEdit />}></Route>
         <Route path="/Account" element={<Account />}></Route>
         <Route path="/Logout" element={<Logout />}></Route>
         <Route path="*" element={<NoPage />}></Route>
