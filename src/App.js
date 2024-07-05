@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Signup from "./components/Signup";
 import Login from "./components/Login";
-import InvoiceMain from "./components/InvoiceMain";
+import Invoice from "./components/Invoice";
 import Account from "./components/Account";
 import NoPage from "./components/NoPage";
 import Logout from "./components/Logout";
@@ -20,7 +20,7 @@ function App() {
     if (token) {
       console.log("1-3");
       // Redirect the user to the home page
-      navigate('/InvoiceMain');
+      navigate('/Invoice');
     } else {
       console.log("1-4");
       // If the token does not exist (i.e., the user is not authenticated)
@@ -38,7 +38,7 @@ function App() {
         <Route path="/" element={<Login />}></Route>
         <Route path="/Login" element={<Login />}></Route>
         <Route path="/Signup" element={<Signup />}></Route>
-        <Route path="/InvoiceMain" element={<InvoiceMain />}></Route>
+        <Route path="/Invoice" element={<Invoice />}></Route>
         <Route path="/Account" element={<Account />}></Route>
         <Route path="/Logout" element={<Logout />}></Route>
         <Route path="*" element={<NoPage />}></Route>

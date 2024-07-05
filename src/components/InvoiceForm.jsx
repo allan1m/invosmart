@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import styles from "./styles/InvoiceMain.css";
+import styles from "./styles/Invoice.css";
 
-function InvoiceForm() {
+function InvoiceForm({ onReview }) {
   const storedUserInfo = localStorage.getItem("userInfo");
   const userInfo = storedUserInfo ? JSON.parse(storedUserInfo) : null;
 
@@ -15,18 +15,12 @@ function InvoiceForm() {
   const state = userInfo ? userInfo.CompanyState : "";
   const zip = userInfo ? userInfo.CompanyZipCode : "";
 
-  // useEffect(() => {
-  //   console.log("User Info:", userInfo);
-  //   console.log("First Name:", firstName);
-  //   console.log("Last Name:", lastName);
-  //   console.log("Email:", email);
-  //   console.log("Phone:", phone);
-  //   console.log("Company:", company);
-  //   console.log("Address:", address);
-  //   console.log("City:", city);
-  //   console.log("State:", state);
-  //   console.log("Zip:", zip);
-  // }, [userInfo, firstName, lastName, email, phone, company, address, city, state, zip]);
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const handleInvoiceReview = (event) => {
+    event.preventDefault();
+    setOpenDialog(true); // Open the dialog on form submission
+  };
 
   const date = new Date();
   const today = date.toLocaleDateString("en-US", {
@@ -45,7 +39,7 @@ function InvoiceForm() {
   // const dueDate = `${invoiceMonth}${invoiceDay}${invoiceYear}`;
 
   const [invoiceNumber, setInvoiceNumber] = useState(`${invoiceDate}1001`);
-  const [subTotal, setSubTotal] = useState("$00.00");
+  //   const [subTotal, setSubTotal] = useState("$00.00");
   const [dueDate, setDueDate] = useState(`${today}`);
   const [total, setTotal] = useState("$00.00");
   const [submittedOn, setSubmittedOn] = useState(`${today}`);
@@ -59,8 +53,8 @@ function InvoiceForm() {
     { description: "", address: "", qty: "", unitPrice: "" },
   ]);
 
-   // Function to handle adding a new item row
-   const addItem = () => {
+  // Function to handle adding a new item row
+  const addItem = () => {
     setItems([
       ...items,
       { description: "", address: "", qty: "", unitPrice: "" },
@@ -104,7 +98,6 @@ function InvoiceForm() {
     setTotal(`$${totalAmount.toFixed(2)}`);
   };
 
-  
   // Function to handle form submission
   const handleInvoiceSubmit = (event) => {
     event.preventDefault();
@@ -138,7 +131,7 @@ function InvoiceForm() {
       .then((response) => response.json())
       .then((data) => {
         console.log("Success:", data);
-        // Handle success
+        // Handle successS
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -146,8 +139,36 @@ function InvoiceForm() {
       });
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const invoiceData = {
+      ClientID: userInfo.ClientID, // Assuming ClientID is part of userInfo
+      InvoiceNumber: invoiceNumber,
+      InvoiceDate: today,
+      DueDate: dueDate, // You can set the due date as needed
+      BilledToEntityName: entityName,
+      BilledToEntityAddress: entityAddress,
+      PayableTo: payableTo,
+      ServicesRendered: servicesRendered,
+      SubmittedOn: submittedOn,
+      Total: parseFloat(total.replace("$", "")),
+      Items: items.map((item) => ({
+        Description: item.description,
+        Address: item.address,
+        Quantity: parseFloat(item.qty),
+        UnitPrice: parseFloat(item.unitPrice),
+      })),
+    };
+    // Store the invoiceData in localStorage as a JSON string
+    localStorage.setItem("invoiceData", JSON.stringify(invoiceData));
+
+    // Log the invoiceData object to the console
+    console.log("USER INFO:", invoiceData);
+  };
+
   return (
-    <form onSubmit={handleInvoiceSubmit}>
+    <form id="invoice" onSubmit={handleSubmit}>
       <h1 className="text-center mb-5">InvoSmart</h1>
       <div className="row d-flex">
         <div className="col">{/* <p>Welcome, {firstName}</p> */}</div>
@@ -263,11 +284,11 @@ function InvoiceForm() {
       </div>
       {/* HEADER FOR: DESCRIPTION, ADDRESS, QTY, UNIT PRICE, TOTAL */}
       <div id="itemsHeader" className="divider py-1 mb-2 bg-dark">
-        <div className="d-flex flex-row justify-content-between">
-          <div className="col-2 me-5">
+        <div className="d-flex flex-row">
+          <div className="col-3 me-2">
             <p className="text-white ps-3">Description</p>
           </div>
-          <div className="col-2 me-5">
+          <div className="col-3 ms-3 me-5">
             <p className="text-white">Address</p>
           </div>
           <div className="col-2 me-4">
@@ -307,23 +328,23 @@ function InvoiceForm() {
               required
             />
           </div>
-          <div className="col-3 me-4">
+          <div className="col-2 me-4">
             <input
               type="text"
               id={`qty-${index}`}
               placeholder="QTY"
-              className="form-control p-3 w-50"
+              className="form-control p-3 w-75"
               value={item.qty}
               onChange={(e) => handleItemChange(index, "qty", e.target.value)}
               required
             />
           </div>
-          <div className="col-1">
+          <div className="col-">
             <input
               type="text"
               id={`unitPrice-${index}`}
               placeholder="Unit Price"
-              className="form-control p-3"
+              className="form-control p-3 w-75"
               value={item.unitPrice}
               onChange={(e) =>
                 handleItemChange(index, "unitPrice", e.target.value)
@@ -333,7 +354,11 @@ function InvoiceForm() {
           </div>
           {/* DELETE BUTTON */}
           <div className="col d-flex flex-row align-items-start ms-2">
-            <button className="btn btn-dark" onClick={() => deleteItem(index)}>
+            <button
+              id="delete"
+              className="fw-bold btn btn-danger border-0"
+              onClick={() => deleteItem(index)}
+            >
               Delete
             </button>
           </div>
@@ -341,28 +366,18 @@ function InvoiceForm() {
       ))}
       {/* ADD ITEM */}
       <div className="d-flex">
-        <button className="btn btn-dark ps-3 pe-3 mt-2" onClick={addItem}>
+        <button
+          id="addItem"
+          className=" fw-bold btn btn-primary ps-3 pe-3 border-0"
+          onClick={addItem}
+        >
           Add Item
         </button>
       </div>
-      {/* SUBTOTAL */}
-      <div className="divider py-1 mb-2">
-        <div class="row d-flex flex-row-reverse">
-          <fieldset disabled class="col-1 text-center ps-2">
-            <input
-              type="text"
-              id="subTotal"
-              className="form-control border-0"
-              value={total}
-            />
-          </fieldset>
-          <div class="col-2 text-center ps-2">Total</div>
-        </div>
-      </div>
       {/* TOTOAL DUE BY  */}
-      <div className="divider py-1 mb-5">
+      <div className="divider py-1 mt-3">
         <div class="row d-flex flex-row-reverse">
-          <fieldset class="col-1 text-center ps-2">
+          <fieldset class="col-2 text-center pe-3">
             <input
               required
               className="form-control"
@@ -373,14 +388,27 @@ function InvoiceForm() {
               onChange={(event) => setDueDate(event.target.value)}
             />
           </fieldset>
-          <div class="col-3 text-center">
-            <p>Total Due by Date </p>
+          <div class="col-2 text-left">
+            <p className="fw-bold">Total Due by Date </p>
           </div>
         </div>
       </div>
-      {/* LOGOUT */}
+      {/* TOTAL */}
+      <div className="divider py-1 mb-5">
+        <div class="row d-flex flex-row-reverse">
+          <fieldset disabled class="col-2 text-center pe-3">
+            <input
+              type="text"
+              id="subTotal"
+              className="form-control border-0"
+              value={total}
+            />
+          </fieldset>
+          <div class="col-1 text-left fw-bold">Total</div>
+        </div>
+      </div>
+      {/* REVIEW INVOICE */}
       <div className="row d-flex flex-row-reverse pb-5">
-        {/* REVIEW INVOICE */}
         <div class="col-2 text-center">
           <button className="btn btn-dark" type="submit">
             Review Invoice

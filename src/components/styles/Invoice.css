@@ -3,11 +3,6 @@
     overflow-y: auto;
 }
 
-.main-invoice-form {
-    height: 100%;
-    overflow-y: auto;
-  }
-
 #clientAddress, #clientCityState, #clientPhoneNum, #clientEmail, #slogan{
     height: 20%;
     text-align: center;
