@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./styles/Invoice.css";
 
-function InvoiceForm({ onReview }) {
+function InvoiceForm({onReview}) {
   const storedUserInfo = localStorage.getItem("userInfo");
   const userInfo = storedUserInfo ? JSON.parse(storedUserInfo) : null;
 
@@ -14,13 +14,6 @@ function InvoiceForm({ onReview }) {
   const city = userInfo ? userInfo.CompanyCity : "";
   const state = userInfo ? userInfo.CompanyState : "";
   const zip = userInfo ? userInfo.CompanyZipCode : "";
-
-  const [openDialog, setOpenDialog] = useState(false);
-
-  const handleInvoiceReview = (event) => {
-    event.preventDefault();
-    setOpenDialog(true); // Open the dialog on form submission
-  };
 
   const date = new Date();
   const today = date.toLocaleDateString("en-US", {
@@ -39,7 +32,7 @@ function InvoiceForm({ onReview }) {
   // const dueDate = `${invoiceMonth}${invoiceDay}${invoiceYear}`;
 
   const [invoiceNumber, setInvoiceNumber] = useState(`${invoiceDate}1001`);
-  //   const [subTotal, setSubTotal] = useState("$00.00");
+//   const [subTotal, setSubTotal] = useState("$00.00");
   const [dueDate, setDueDate] = useState(`${today}`);
   const [total, setTotal] = useState("$00.00");
   const [submittedOn, setSubmittedOn] = useState(`${today}`);
@@ -53,8 +46,8 @@ function InvoiceForm({ onReview }) {
     { description: "", address: "", qty: "", unitPrice: "" },
   ]);
 
-  // Function to handle adding a new item row
-  const addItem = () => {
+   // Function to handle adding a new item row
+   const addItem = () => {
     setItems([
       ...items,
       { description: "", address: "", qty: "", unitPrice: "" },
@@ -98,6 +91,7 @@ function InvoiceForm({ onReview }) {
     setTotal(`$${totalAmount.toFixed(2)}`);
   };
 
+  
   // Function to handle form submission
   const handleInvoiceSubmit = (event) => {
     event.preventDefault();
@@ -121,6 +115,7 @@ function InvoiceForm({ onReview }) {
       })),
     };
 
+
     fetch("http://localhost:5073/api/Invoice/CreateInvoice", {
       method: "POST",
       headers: {
@@ -139,59 +134,60 @@ function InvoiceForm({ onReview }) {
       });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const invoiceData = {
-      ClientID: userInfo.ClientID, // Assuming ClientID is part of userInfo
-      InvoiceNumber: invoiceNumber,
-      InvoiceDate: today,
-      DueDate: dueDate, // You can set the due date as needed
-      BilledToEntityName: entityName,
-      BilledToEntityAddress: entityAddress,
-      PayableTo: payableTo,
-      ServicesRendered: servicesRendered,
-      SubmittedOn: submittedOn,
-      Total: parseFloat(total.replace("$", "")),
-      Items: items.map((item) => ({
-        Description: item.description,
-        Address: item.address,
-        Quantity: parseFloat(item.qty),
-        UnitPrice: parseFloat(item.unitPrice),
-      })),
-    };
-    // Store the invoiceData in localStorage as a JSON string
+  const saveFormData = () => {
+    const invoiceData = getFormData();
     localStorage.setItem("invoiceData", JSON.stringify(invoiceData));
+  };
 
-    // Log the invoiceData object to the console
-    console.log("USER INFO:", invoiceData);
+  const getFormData = () => ({   
+    invoiceNumber,
+    today,
+    dueDate,
+    entityName,
+    entityAddress,
+    payableTo,
+    servicesRendered,
+    submittedOn,
+    total: parseFloat(total.replace("$", "")),
+    items: items.map((item) => ({
+      description: item.description,
+      address: item.address,
+      qty: parseFloat(item.qty),
+      unitPrice: parseFloat(item.unitPrice),
+    })),
+  });
+
+  const handleInvoiceReview = (event) => {
+    event.preventDefault();
+    saveFormData();
+    onReview(getFormData());
   };
 
   return (
-    <form id="invoice" onSubmit={handleSubmit}>
-      <h1 className="text-center mb-5">InvoSmart</h1>
+    <form id="invoice" onSubmit={handleInvoiceReview}>
+      <h1 className="text-center mb-5 pt-5">InvoSmart</h1>
       <div className="row d-flex">
         <div className="col">{/* <p>Welcome, {firstName}</p> */}</div>
       </div>
       {/* Clients company information, e.g., address, city, state zip, etc. */}
       <div className="row d-flex justify-content-between mb-5 pb-5">
         <div className="col-4 position text-center">
-          <p className="text-start ps-5">{address}</p>
-          <p className="text-start ps-5">
+          <h5 className="text-start fw-bold ps-5">{address}</h5>
+          <h5 className="text-start fw-bold ps-5">
             {city}, {state} {zip}
-          </p>
-          <p className="text-start ps-5">{phone}</p>
-          <p className="text-start ps-5">{email}</p>
+          </h5>
+          <h5 className="text-start fw-bold ps-5">{phone}</h5>
+          <h5 className="text-start fw-bold ps-5">{email}</h5>
         </div>
         <div className="col-4">
-          <p className="text-center ps-5">{company}</p>
+          <h5 className="text-center fw-bold ps-5">{company}</h5>
         </div>
       </div>
       {/* HEADER FOR: Invoice # and current date */}
       <div className="divider py-1 mb-2 bg-dark">
         <div className="d-flex flex-row">
           <div className="flex-col">
-            <h2 className="ps-5 text-white">Invoice No.</h2>
+            <h3 className="ps-3 text-white">Invoice No.</h3>
           </div>
           <div className="col d-flex align-items-center ps-3">
             {/* INVOICE # */}
@@ -211,18 +207,18 @@ function InvoiceForm({ onReview }) {
         </div>
       </div>
       {/* HEADER FOR: BILL TO, PAYABLE TO, SERVICE, SUBMITTED ON */}
-      <div className="row">
+      <div className="row ps-3">
         <div className="col">
-          <h3 className="text-center"> BILL TO </h3>
+          <h3 className="text-left fw-bold"> BILL TO </h3>
         </div>
         <div className="col">
-          <h3 className="text-center"> PAYABLE TO </h3>
+          <h3 className="text-left fw-bold"> PAYABLE TO </h3>
         </div>
         <div className="col">
-          <h3 className="text-center"> SERVICE </h3>
+          <h3 className="text-left fw-bold"> SERVICE </h3>
         </div>
         <div className="col">
-          <h3 className="text-center"> SUBMITTED ON </h3>
+          <h3 className="text-left fw-bold"> SUBMITTED ON </h3>
         </div>
       </div>
       <hr className="mt-0" />
@@ -354,11 +350,7 @@ function InvoiceForm({ onReview }) {
           </div>
           {/* DELETE BUTTON */}
           <div className="col d-flex flex-row align-items-start ms-2">
-            <button
-              id="delete"
-              className="fw-bold btn btn-danger border-0"
-              onClick={() => deleteItem(index)}
-            >
+            <button id="delete" className="fw-bold btn btn-danger border-0" onClick={() => deleteItem(index)}>
               Delete
             </button>
           </div>
@@ -366,11 +358,7 @@ function InvoiceForm({ onReview }) {
       ))}
       {/* ADD ITEM */}
       <div className="d-flex">
-        <button
-          id="addItem"
-          className=" fw-bold btn btn-primary ps-3 pe-3 border-0"
-          onClick={addItem}
-        >
+        <button id="addItem" className=" fw-bold btn btn-primary ps-3 pe-3 border-0" onClick={addItem}>
           Add Item
         </button>
       </div>
@@ -410,7 +398,7 @@ function InvoiceForm({ onReview }) {
       {/* REVIEW INVOICE */}
       <div className="row d-flex flex-row-reverse pb-5">
         <div class="col-2 text-center">
-          <button className="btn btn-dark" type="submit">
+          <button id="reviewInvoice" type="submit" className="btn btn-outline-dark border-">
             Review Invoice
           </button>
         </div>
