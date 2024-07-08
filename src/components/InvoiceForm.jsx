@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from "react";
+import UserInfoHeader from "./UserInfoHeader";
+import InvoiceHeader from "./InvoiceHeader";
+import BillingServiceInfo from "./BillingServiceInfo";
+import InvoiceItems from "./InvoiceItems";
+import TotalDue from "./TotalDue";
+import FormButton from "./FormButton";
 import styles from "./styles/Invoice.css";
 
 function InvoiceForm({onReview}) {
   const storedUserInfo = localStorage.getItem("userInfo");
   const userInfo = storedUserInfo ? JSON.parse(storedUserInfo) : null;
+  console.log(userInfo);
 
   const firstName = userInfo ? userInfo.FirstName : "";
   const lastName = userInfo ? userInfo.LastName : "";
@@ -170,239 +177,45 @@ function InvoiceForm({onReview}) {
         <div className="col">{/* <p>Welcome, {firstName}</p> */}</div>
       </div>
       {/* Clients company information, e.g., address, city, state zip, etc. */}
-      <div className="row d-flex justify-content-between mb-5 pb-5">
-        <div className="col-4 position text-center">
-          <h5 className="text-start fw-bold ps-5">{address}</h5>
-          <h5 className="text-start fw-bold ps-5">
-            {city}, {state} {zip}
-          </h5>
-          <h5 className="text-start fw-bold ps-5">{phone}</h5>
-          <h5 className="text-start fw-bold ps-5">{email}</h5>
-        </div>
-        <div className="col-4">
-          <h5 className="text-center fw-bold ps-5">{company}</h5>
-        </div>
-      </div>
+      <UserInfoHeader
+        address={address}
+        city={city}
+        state={state}
+        zip={zip}
+        phone={phone}
+        email={email}
+        company={company}
+      />
       {/* HEADER FOR: Invoice # and current date */}
-      <div className="divider py-1 mb-2 bg-dark">
-        <div className="d-flex flex-row">
-          <div className="flex-col">
-            <h3 className="ps-3 text-white">Invoice No.</h3>
-          </div>
-          <div className="col d-flex align-items-center ps-3">
-            {/* INVOICE # */}
-            <input
-              required
-              className="form-control"
-              type="number"
-              name="invoiceNumber"
-              id="invoiceNumber"
-              value={invoiceNumber}
-              onChange={(event) => setInvoiceNumber(event.target.value)}
-            />
-          </div>
-          <div className="col d-flex flex-row-reverse">
-            <h2 className="text-center pe-5 text-white">{today}</h2>
-          </div>
-        </div>
-      </div>
+      <InvoiceHeader
+        invoiceNumber={invoiceNumber}
+        setInvoiceNumber={setInvoiceNumber}
+        today={today}
+      />
       {/* HEADER FOR: BILL TO, PAYABLE TO, SERVICE, SUBMITTED ON */}
-      <div className="row ps-3">
-        <div className="col">
-          <h3 className="text-left fw-bold"> BILL TO </h3>
-        </div>
-        <div className="col">
-          <h3 className="text-left fw-bold"> PAYABLE TO </h3>
-        </div>
-        <div className="col">
-          <h3 className="text-left fw-bold"> SERVICE </h3>
-        </div>
-        <div className="col">
-          <h3 className="text-left fw-bold"> SUBMITTED ON </h3>
-        </div>
-      </div>
-      <hr className="mt-0" />
-      {/* INPUTS FOR: BILL TO, PAYABLE TO, SERVICE, SUBMITTED ON */}
-      <div className="row mb-5">
-        <div className="col">
-          <input
-            type="text"
-            id="entityName"
-            placeholder="ENTITY NAME"
-            className="form-control mb-1"
-            value={entityName}
-            onChange={(e) => setEntityName(e.target.value)}
-            required
-          />
-          <input
-            type="text"
-            id="entityAddress"
-            placeholder="ENTITY ADDRESS"
-            className="form-control"
-            value={entityAddress}
-            onChange={(e) => setEntityAddress(e.target.value)}
-            required
-          />
-        </div>
-        <div className="col">
-          <input
-            type="text"
-            id="company"
-            placeholder="COMPANY"
-            className="form-control"
-            value={payableTo}
-            onChange={(e) => setPayableTo(e.target.value)}
-            required
-          />
-        </div>
-        <div className="col">
-          <input
-            type="text"
-            id="service"
-            placeholder="Service Rendered"
-            className="form-control"
-            value={servicesRendered}
-            onChange={(e) => setServicesRendered(e.target.value)}
-            required
-          />
-        </div>
-        <div className="col">
-          <input
-            type="text"
-            id="submissionDate"
-            placeholder="Submitted On"
-            className="form-control"
-            value={submittedOn}
-            onChange={(e) => setSubmittedOn(e.target.value)}
-            required
-          />
-        </div>
-      </div>
+      <BillingServiceInfo
+        entityName={entityName}
+        setEntityName={setEntityName}
+        entityAddress={entityAddress}
+        setEntityAddress={setEntityAddress}
+        payableTo={payableTo}
+        setPayableTo={setPayableTo}
+        servicesRendered={servicesRendered}
+        setServicesRendered={setServicesRendered}
+        submittedOn={submittedOn}
+        setSubmittedOn={setSubmittedOn}
+      />
       {/* HEADER FOR: DESCRIPTION, ADDRESS, QTY, UNIT PRICE, TOTAL */}
-      <div id="itemsHeader" className="divider py-1 mb-2 bg-dark">
-        <div className="d-flex flex-row">
-          <div className="col-3 me-2">
-            <p className="text-white ps-3">Description</p>
-          </div>
-          <div className="col-3 ms-3 me-5">
-            <p className="text-white">Address</p>
-          </div>
-          <div className="col-2 me-4">
-            <p className="text-white">QTY</p>
-          </div>
-          <div className="col-2">
-            <p className="text-white">Unit Price</p>
-          </div>
-        </div>
-      </div>
-      {/* INPUTS FOR: DESCRIPTION, ADDRESS, QTY, UNIT PRICE, TOTAL */}
-      {items.map((item, index) => (
-        <div id="items" className="d-flex flex-row justify-content-between">
-          <div className="col-3 me-4">
-            <input
-              type="text"
-              id={`description-${index}`}
-              placeholder="Description"
-              className="form-control p-3"
-              value={item.description}
-              onChange={(e) =>
-                handleItemChange(index, "description", e.target.value)
-              }
-              required
-            />
-          </div>
-          <div className="col-3 me-5">
-            <input
-              type="text"
-              id={`address-${index}`}
-              placeholder="Address"
-              className="form-control p-3"
-              value={item.address}
-              onChange={(e) =>
-                handleItemChange(index, "address", e.target.value)
-              }
-              required
-            />
-          </div>
-          <div className="col-2 me-4">
-            <input
-              type="text"
-              id={`qty-${index}`}
-              placeholder="QTY"
-              className="form-control p-3 w-75"
-              value={item.qty}
-              onChange={(e) => handleItemChange(index, "qty", e.target.value)}
-              required
-            />
-          </div>
-          <div className="col-">
-            <input
-              type="text"
-              id={`unitPrice-${index}`}
-              placeholder="Unit Price"
-              className="form-control p-3 w-75"
-              value={item.unitPrice}
-              onChange={(e) =>
-                handleItemChange(index, "unitPrice", e.target.value)
-              }
-              required
-            />
-          </div>
-          {/* DELETE BUTTON */}
-          <div className="col d-flex flex-row align-items-start ms-2">
-            <button id="delete" className="fw-bold btn btn-danger border-0" onClick={() => deleteItem(index)}>
-              Delete
-            </button>
-          </div>
-        </div>
-      ))}
-      {/* ADD ITEM */}
-      <div className="d-flex">
-        <button id="addItem" className=" fw-bold btn btn-primary ps-3 pe-3 border-0" onClick={addItem}>
-          Add Item
-        </button>
-      </div>
+      <InvoiceItems
+        items={items}
+        handleItemChange={handleItemChange}
+        deleteItem={deleteItem}
+        addItem={addItem}
+      />
       {/* TOTOAL DUE BY  */}
-      <div className="divider py-1 mt-3">
-        <div class="row d-flex flex-row-reverse">
-          <fieldset class="col-2 text-center pe-3">
-            <input
-              required
-              className="form-control"
-              id="dueDate"
-              type="text"
-              name="dueDate"
-              value={dueDate}
-              onChange={(event) => setDueDate(event.target.value)}
-            />
-          </fieldset>
-          <div class="col-2 text-left">
-            <p className="fw-bold">Total Due by Date </p>
-          </div>
-        </div>
-      </div>
-      {/* TOTAL */}
-      <div className="divider py-1 mb-5">
-        <div class="row d-flex flex-row-reverse">
-          <fieldset disabled class="col-2 text-center pe-3">
-            <input
-              type="text"
-              id="subTotal"
-              className="form-control border-0"
-              value={total}
-            />
-          </fieldset>
-          <div class="col-1 text-left fw-bold">Total</div>
-        </div>
-      </div>
+      <TotalDue total={total} dueDate={dueDate} setDueDate={setDueDate} />
       {/* REVIEW INVOICE */}
-      <div className="row d-flex flex-row-reverse pb-5">
-        <div class="col-2 text-center">
-          <button id="reviewInvoice" type="submit" className="btn btn-outline-dark border-">
-            Review Invoice
-          </button>
-        </div>
-      </div>
+      <FormButton handleInvoiceReview={handleInvoiceReview} />
     </form>
   );
 }

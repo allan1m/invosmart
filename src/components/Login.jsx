@@ -74,7 +74,7 @@ function Login() {
         console.log(userInfo);
 
         // Redirect or navigate to another page
-        navigate("/InvoiceMain");
+        navigate("/Invoice");
       } else {
         console.log("Error: " + data);
         setSignupError("Unable to login. Please try again later.");
