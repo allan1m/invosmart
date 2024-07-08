@@ -1,11 +1,22 @@
-import React from "react";
+import React, {useState} from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { Dialog, DialogContent, DialogActions, Button } from "@mui/material";
+import {
+  Dialog,
+  DialogContent,
+  DialogActions,
+  Button,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 import InvoicePreview from "./InvoicePreview";
 
 const InvoiceDialog = ({ openDialog, setOpenDialog, reviewData, userInfo }) => {
-    console.log('InvoiceDialog: ' + userInfo);
+  const [notificationOpen, setNotificationOpen] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState("");
+  const [notificationSeverity, setNotificationSeverity] = useState("success");
+
+  console.log("InvoiceDialog: " + userInfo);
   const generatePDF = () => {
     const input = document.getElementById("DialogBox");
     html2canvas(input).then((canvas) => {
@@ -27,7 +38,7 @@ const InvoiceDialog = ({ openDialog, setOpenDialog, reviewData, userInfo }) => {
         heightLeft -= pageHeight;
       }
 
-      pdf.save("invoice.pdf");
+      pdf.save("invoice"+reviewData.invoiceNumber+".pdf");
     });
   };
 
@@ -63,10 +74,20 @@ const InvoiceDialog = ({ openDialog, setOpenDialog, reviewData, userInfo }) => {
       .then((response) => response.json())
       .then((data) => {
         console.log("Success:", data);
+        setNotificationMessage("Invoice submitted successfully!");
+        setNotificationSeverity("success");
+        setNotificationOpen(true);
       })
       .catch((error) => {
         console.error("Error:", error);
+        setNotificationMessage("Failed to submit invoice. Please try again.");
+        setNotificationSeverity("error");
+        setNotificationOpen(true);
       });
+  };
+
+  const handleCloseNotification = () => {
+    setNotificationOpen(false);
   };
 
   return (
@@ -77,7 +98,9 @@ const InvoiceDialog = ({ openDialog, setOpenDialog, reviewData, userInfo }) => {
       fullWidth
     >
       <DialogContent id="DialogBox">
-        {reviewData && <InvoicePreview reviewData={reviewData} userInfo={userInfo} />}
+        {reviewData && (
+          <InvoicePreview reviewData={reviewData} userInfo={userInfo} />
+        )}
       </DialogContent>
       <DialogActions>
         <Button onClick={handleInvoiceSubmit} color="primary">
@@ -95,6 +118,19 @@ const InvoiceDialog = ({ openDialog, setOpenDialog, reviewData, userInfo }) => {
         </Button>
       </DialogActions>
       <p className="ps-5">Powered by InvoSmart</p>
+      <Snackbar
+        open={notificationOpen}
+        autoHideDuration={6000}
+        onClose={handleCloseNotification}
+      >
+        <Alert
+          onClose={handleCloseNotification}
+          severity={notificationSeverity}
+          sx={{ width: "100%" }}
+        >
+          {notificationMessage}
+        </Alert>
+      </Snackbar>
     </Dialog>
   );
 };
