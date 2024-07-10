@@ -119,6 +119,7 @@ const InvoiceDialog = ({ openDialog, setOpenDialog, reviewData, userInfo }) => {
       </DialogActions>
       <p className="ps-5">Powered by InvoSmart</p>
       <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={notificationOpen}
         autoHideDuration={6000}
         onClose={handleCloseNotification}

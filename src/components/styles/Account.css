@@ -1,0 +1,13 @@
+.account-page input{
+    display: flex;
+    margin: auto;
+    width: 480px;
+    height: 80px;
+}
+
+.account-page .form-control{
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+
+}

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import Layout from "./Layout";
+import AccountButton from "./AccountButton";
 import Logout from "./Logout";
 import InvoiceForm from "./InvoiceForm";
 import InvoiceDialog from "./InvoiceDialog";
@@ -33,7 +35,7 @@ function Invoice() {
     setOpenDialog(true);
   };
 
-  // // Function to open create PDF 
+  // // Function to open create PDF
   // const generatePDF = () => {
   //   const input = document.getElementById("DialogBox"); // ID of the div containing the invoice
   //   html2canvas(input).then((canvas) => {
@@ -82,7 +84,6 @@ function Invoice() {
   //     })),
   //   };
 
-
   //   fetch("http://localhost:5073/api/Invoice/CreateInvoice", {
   //     method: "POST",
   //     headers: {
@@ -102,19 +103,18 @@ function Invoice() {
   // };
 
   return (
-    <div className="d-flex justify-content-center align-items-center w-100 vh-100 bg-dark">
-      <div className="container position-relative rounded bg-white ps-5 pt-2 pe-5 pb-2">
-        <Logout />
-        <InvoiceForm onReview={handleReview} />
-        {/* Dialog for Invoice Preview */}
-        <InvoiceDialog 
-          openDialog={openDialog} 
-          setOpenDialog={setOpenDialog} 
-          reviewData={reviewData} 
-          userInfo={userInfo} 
-        />
-      </div>
-    </div>
+    <Layout>
+      <AccountButton />
+      <Logout />
+      <InvoiceForm onReview={handleReview} />
+      {/* Dialog for Invoice Preview */}
+      <InvoiceDialog
+        openDialog={openDialog}
+        setOpenDialog={setOpenDialog}
+        reviewData={reviewData}
+        userInfo={userInfo}
+      />
+    </Layout>
   );
 }
 

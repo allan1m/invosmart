@@ -19,8 +19,10 @@ function App() {
     // If token exists, redirect to home page
     if (token) {
       console.log("1-3");
-      // Redirect the user to the home page
-      navigate('/Invoice');
+      // If token exists AND if the user is not already on an allowed page, navigate to the invoice page
+      if (window.location.pathname === '/' || window.location.pathname === '/Login' || window.location.pathname === '/Signup') {
+        navigate('/Invoice');
+      }
     } else {
       console.log("1-4");
       // If the token does not exist (i.e., the user is not authenticated)
@@ -40,7 +42,6 @@ function App() {
         <Route path="/Signup" element={<Signup />}></Route>
         <Route path="/Invoice" element={<Invoice />}></Route>
         <Route path="/Account" element={<Account />}></Route>
-        <Route path="/Logout" element={<Logout />}></Route>
         <Route path="*" element={<NoPage />}></Route>
       </Routes>
   );

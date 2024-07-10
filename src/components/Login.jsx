@@ -1,5 +1,6 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Snackbar, Alert } from "@mui/material";
 import "./styles/Login-Signup.css";
 
 import user_icon from "../Assets/user_icon.svg";
@@ -13,6 +14,9 @@ function Login() {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [signupError, setSignupError] = useState(""); // State for signup errors
+  const [notificationOpen, setNotificationOpen] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState("");
+  const [notificationSeverity, setNotificationSeverity] = useState("success");
   const navigate = useNavigate(); // Hook for navigation
 
   const validateEmail = (email) => {
@@ -20,7 +24,7 @@ function Login() {
     return emailRegex.test(email);
   };
 
-  async function handleLogin(event){
+  async function handleLogin(event) {
     console.log("Handle Login event");
     event.preventDefault(); // Prevents the default form submission behavior
 
@@ -43,6 +47,7 @@ function Login() {
     try {
       console.log("1-1");
       const response = await fetch(
+        // "https://invosmart-be.azurewebsites.net/api/Authentication/LoginClient",
         "http://localhost:5073/api/Authentication/LoginClient",
         {
           method: "POST",
@@ -59,34 +64,44 @@ function Login() {
 
       if (data === "Fail") {
         console.log("UNSUCCESSFUL LOG ATTEMPT.");
-        setSignupError("Incorrect email and/ or password.")
-      } 
-      else if (data.Token) {
+        // Display success notification
+        setNotificationMessage("Incorrect email and/ or password. Please try again.");
+        setNotificationSeverity("error");
+        setNotificationOpen(true);
+      } else if (data.Token) {
         console.log("Successfully logged in");
         // Successfully signed up, retrieve JWT token from response
         const token = data.Token;
         const userInfo = data;
 
         // Store the token securely (localStorage or sessionStorage)
-        localStorage.setItem('jwtToken', token); // Store in localStorage
-        localStorage.setItem('userInfo', JSON.stringify(userInfo)); // Store in sessionStorage
+        localStorage.setItem("jwtToken", token); // Store in localStorage
+        localStorage.setItem("userInfo", JSON.stringify(userInfo)); // Store in sessionStorage
         console.log(token);
         console.log(userInfo);
 
-        // Redirect or navigate to another page
-        navigate("/Invoice");
+        // Display success notification
+        setNotificationMessage("Successfully logged in");
+        setNotificationSeverity("success");
+        setNotificationOpen(true);
+
+        // Redirect or navigate to another page after a short delay
+        setTimeout(() => {
+          navigate("/Invoice");
+        }, 1000);
       } else {
         console.log("Error: " + data);
         setSignupError("Unable to login. Please try again later.");
       }
-      
     } catch (error) {
       console.error("Error:", error);
       setSignupError("Something went wrong. Please try again later.");
     }
   }
 
-  
+  const handleCloseNotification = () => {
+    setNotificationOpen(false);
+  };
 
   return (
     <div className="login template d-flex justify-content-center align-items-center w-100 vh-100 bg-dark">
@@ -125,10 +140,24 @@ function Login() {
             {signupError && <p className="text-danger">{signupError}</p>}
           </div>
           <div className="d-grid">
-          <button className="btn btn-dark" type="submit">
+            <button className="btn btn-dark" type="submit">
               Login
             </button>
           </div>
+          <Snackbar
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            open={notificationOpen}
+            autoHideDuration={6000}
+            onClose={handleCloseNotification}
+          >
+            <Alert
+              onClose={handleCloseNotification}
+              severity={notificationSeverity}
+              sx={{ width: "100%" }}
+            >
+              {notificationMessage}
+            </Alert>
+          </Snackbar>
           <p className="text-end mt-2">
             Forgot <a href="">Password?</a>
           </p>
