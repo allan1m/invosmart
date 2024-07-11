@@ -172,7 +172,6 @@ function InvoiceForm({onReview}) {
 
   return (
     <form id="invoice" onSubmit={handleInvoiceReview}>
-      <h1 className="text-center mb-5 pt-5">InvoSmart</h1>
       <div className="row d-flex">
         <div className="col">{/* <p>Welcome, {firstName}</p> */}</div>
       </div>
