@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import Signup from "./components/Signup";
 import Login from "./components/Login";
 import Invoice from "./components/Invoice";
+import InvoiceHistory from "./components/InvoiceHistory";
 import Account from "./components/Account";
 import NoPage from "./components/NoPage";
 import Logout from "./components/Logout";
@@ -42,6 +43,7 @@ function App() {
         <Route path="/Signup" element={<Signup />}></Route>
         <Route path="/Invoice" element={<Invoice />}></Route>
         <Route path="/Account" element={<Account />}></Route>
+        <Route path="/InvoiceHistory" element={<InvoiceHistory />}></Route>        
         <Route path="*" element={<NoPage />}></Route>
       </Routes>
   );

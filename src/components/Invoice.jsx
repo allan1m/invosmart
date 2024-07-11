@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Layout from "./Layout";
 import AccountButton from "./AccountButton";
+import InvoiceHistoryButton from "./InvoiceHistoryButton";
 import Logout from "./Logout";
 import InvoiceForm from "./InvoiceForm";
 import InvoiceDialog from "./InvoiceDialog";
@@ -105,6 +106,7 @@ function Invoice() {
   return (
     <Layout>
       <AccountButton />
+      <InvoiceHistoryButton/>
       <Logout />
       <InvoiceForm onReview={handleReview} />
       {/* Dialog for Invoice Preview */}

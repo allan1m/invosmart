@@ -4,16 +4,6 @@ import InvoiceButton from "./InvoiceButton";
 import "./styles/Account.css";
 
 function Account() {
-  // const [firstName, setFirstName] = useState("");
-  // const [lastName, setLastName] = useState("");
-  // const [phone, setPhone] = useState("");
-  // const [company, setCompany] = useState("");
-  // const [companyAddress, setCompanyAddress] = useState("");
-  // const [companyCity, setCompanyCity] = useState("");
-  // const [companyState, setCompanyState] = useState("");
-  // const [companyZip, setCompanyZip] = useState("");
-  // const [email, setEmail] = useState("");
-
   const storedUserInfo = localStorage.getItem("userInfo");
   const userInfo = storedUserInfo ? JSON.parse(storedUserInfo) : null;
   const [userData, setUserData] = useState(userInfo);
