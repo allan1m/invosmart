@@ -1,13 +1,21 @@
-import React, {useState} from "react";
-import Layout from "./Layout";
-import InvoiceButton from "./InvoiceButton";
-import "./styles/Account.css";
+import React, { useState } from "react"; // Importing React and useState hook
+import Layout from "./Layout"; // Importing the Layout component
+import InvoiceButton from "./InvoiceButton"; // Importing the InvoiceButton component
+import "./styles/Account.css"; // Importing the CSS file for styling
 
+/**
+ * The ACCOUNT component manages and displays the user's account information.
+ * It allows the user to update their information and save the changes.
+ */
 function Account() {
+  // Retrieving stored user info from local storage and parsing it
   const storedUserInfo = localStorage.getItem("userInfo");
   const userInfo = storedUserInfo ? JSON.parse(storedUserInfo) : null;
+
+  // Initializing the state with the user info
   const [userData, setUserData] = useState(userInfo);
 
+  // If no user info is found, display a message
   if (!userInfo) {
     return (
       <Layout>
@@ -18,6 +26,13 @@ function Account() {
     );
   }
 
+  /**
+   * Handles the input change event for each input field.
+   * Updates the state with the new value for the corresponding key.
+   *
+   * @param {string} key - The key of the user info being updated
+   * @param {string} value - The new value of the input field
+   */
   const handleInputChange = (key, value) => {
     setUserData((prevData) => ({
       ...prevData,
@@ -25,42 +40,78 @@ function Account() {
     }));
   };
 
+  /**
+   * Handles the form submission event.
+   * Compares the updated data with the original user info and prepares the changes for submission.
+   * Sends the updated data to the server via a POST request.
+   *
+   * @param {object} event - The form submission event
+   */
   const handleAccountChanges = (event) => {
-    event.preventDefault();
-    const updatedData = {};
-    
-    Object.keys(userData).forEach(key => {
-      if (userData[key] !== userInfo[key]) {
-        updatedData[key] = userData[key];
+    event.preventDefault(); // Prevents the default form submission behavior to stop the page from reloading
+
+    // Define a mapping between frontend keys and SQL column names
+    const keyMapping = {
+      Email: "clientEmail",
+      FirstName: "clientFirstName",
+      LastName: "clientLastName",
+      CompanyPhone: "clientPhoneNumber",
+      Company: "clientCompanyName",
+      CompanyAddress: "clientCompanyAddress",
+      CompanyCity: "clientCompanyCity",
+      CompanyState: "clientCompanyState",
+      CompanyZipCode: "clientCompanyZipCode"
+    };
+
+    const updatedData = {}; // Initializes an empty object to store the updated user data
+
+    // Loop through user data and collect ONLY the changed values
+    Object.keys(userData).forEach((key) => {
+      if (userData[key] !== userInfo[key]) { // Checks if the value has changed compared to the original user info
+        const sqlKey = keyMapping[key] || key; // Use the mapped key or default to the original key if no mapping is found
+        updatedData[sqlKey] = userData[key]; // Adds the changed value to the updatedData object
       }
     });
 
+    updatedData["ClientID"] = userInfo.ClientID;
+
+    console.log(updatedData);
+
     // Save the updated user data to local storage or send to the server
     if (Object.keys(updatedData).length > 0) {
-      console.log('Submitting updated data:', updatedData);
+      // Checks if there are any changes
+      console.log("Submitting updated data:", updatedData); // Logs the updated data for debugging
       // Optionally, you can also send this data to the server via an API call
-      // fetch('/api/updateUserInfo', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json'
-      //   },
-      //   body: JSON.stringify(updatedData)
-      // }).then(response => response.json())
-      // .then(data => {
-      //   console.log('Success:', data);
-      //   // Update local storage if the API call is successful
-      //   localStorage.setItem("userInfo", JSON.stringify(userData));
-      // }).catch(error => {
-      //   console.error('Error:', error);
-      // });
+      fetch("http://localhost:5073/api/Authentication/UpdateUserInfo", {
+        // Makes a POST request to the server to update user info
+        method: "POST", // Specify the request method, in this case it is POST
+        headers: {
+          "Content-Type": "application/json", // Sets the request headers to indicate JSON data
+        },
+        body: JSON.stringify(updatedData), // Converts the updatedData object to a JSON string for the request body
+      })
+        .then((response) => response.json()) // Parses the JSON response from the server
+        .then((data) => {
+          console.log("Success:", data); // Logs the success message and data returned from the server
+          // Update local storage if the API call is successful with the new user data
+          localStorage.setItem("userInfo", JSON.stringify(userData));
+        })
+        .catch((error) => {
+          console.error("Error:", error); // Logs any errors that occur during the fetch request
+        });
 
       // For demonstration purposes, we update local storage directly
+      // Updates the local storage with the new user data regardless of server response
       localStorage.setItem("userInfo", JSON.stringify(userData));
     }
   };
 
+  // Filtering user info keys to exclude "Token" and "ClientID"
+  const userInfoKeys = Object.keys(userInfo).filter(
+    (key) => key !== "Token" && key !== "ClientID"
+  );
 
-  const userInfoKeys = Object.keys(userInfo).filter(key => key !== "Token" && key !== "ClientID");
+  // Splitting the keys into two halves for display
   const half = Math.ceil(userInfoKeys.length / 2);
   const firstHalfKeys = userInfoKeys.slice(0, half);
   const secondHalfKeys = userInfoKeys.slice(half);
@@ -68,14 +119,16 @@ function Account() {
   return (
     <Layout>
       <div className="account-page row mt-4">
-      <div className="header d-flex flex-row">
-        <h1 className="col">Account and Settings</h1>
-        <InvoiceButton className="col"/>
+        <div className="header d-flex flex-row">
+          <h1 className="col">Account and Settings</h1>
+          <InvoiceButton className="col" />
         </div>
         <form onSubmit={handleAccountChanges} className="col-md-6 mt-5 mb-5">
           {firstHalfKeys.map((key, index) => (
             <div key={index} className="mb-3">
-              <label htmlFor={key} className="form-label">{key}</label>
+              <label htmlFor={key} className="form-label fw-bold">
+                {key}
+              </label>
               <input
                 type="text"
                 id={key}
@@ -90,7 +143,9 @@ function Account() {
         <form onSubmit={handleAccountChanges} className="col-md-6 mt-5 mb-3">
           {secondHalfKeys.map((key, index) => (
             <div key={index} className="mb-3">
-              <label htmlFor={key} className="form-label">{key}</label>
+              <label htmlFor={key} className="form-label fw-bold">
+                {key}
+              </label>
               <input
                 type="text"
                 id={key}
@@ -102,8 +157,10 @@ function Account() {
             </div>
           ))}
           <div className="d-flex flex-row-reverse position-relative">
-        <button type="submit" className="btn btn-dark w-100 mt-4 p-3">Save Changes</button>
-        </div>          
+            <button type="submit" className="btn btn-dark w-100 mt-4 p-3">
+              Save Changes
+            </button>
+          </div>
         </form>
       </div>
     </Layout>

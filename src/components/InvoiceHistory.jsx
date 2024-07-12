@@ -58,11 +58,16 @@ function InvoiceHistory() {
   return (
     <Layout>
       <div className="invoice-history-page">
-      <div className="d-flex flex-row justify-content-evenly">
-        <h3 className="col-7 text-center">Invoice History for {company}</h3>
+      <div className="d-flex flex-row justify-content-evenly m-3">
+        <h3 className="col-7 text-left">InvoSmart</h3>
+        <div className="col-2 ps-5 ms-3">
         <AccountButton />
+        </div>
+        <div className="">
         <InvoiceButton />
         </div>
+        </div>
+        <h3 className="text-left mb-3">Invoice History for {company}</h3>
         <div className="table-responsive">
           {invoices.length > 0 ? (
             <table className="table table-striped table-sm align-middle">
