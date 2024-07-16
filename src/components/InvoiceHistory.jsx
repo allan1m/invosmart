@@ -3,20 +3,32 @@ import Layout from "./Layout";
 import AccountButton from "./AccountButton";
 import InvoiceButton from "./InvoiceButton";
 
+/**
+ * INVOICE HISTORY
+ * This component displays the invoice history page, fetching and rendering invoices for a specific user
+ */
 function InvoiceHistory() {
+  // Retrieve user information from local storage or default to null
   const storedUserInfo = localStorage.getItem("userInfo");
   const userInfo = storedUserInfo ? JSON.parse(storedUserInfo) : null;
+
+  // State to store fetched invoices
   const [invoices, setInvoices] = useState([]);
+
+  // Extract company name from user info or default to an empty string
   const company = userInfo ? userInfo.Company : "";
-  console.log("InvoiceHistory: " + userInfo.ClientID);
 
+  // Log the ClientID of the user to console for debugging
+  console.log("InvoiceHistory: " + (userInfo ? userInfo.ClientID : ""));
 
+  // Fetch invoices when userInfo changes (typically on component mount)
   useEffect(() => {
     if (userInfo) {
       fetchInvoices(userInfo.ClientID);
     }
   }, [userInfo]);
 
+  // Function to fetch invoices from the server
   const fetchInvoices = async (ClientID) => {
     try {
       const response = await fetch(
@@ -28,6 +40,7 @@ function InvoiceHistory() {
           },
         }
       );
+      // Log the response for debugging
       console.log(response);
 
       if (response.ok) {
@@ -45,6 +58,7 @@ function InvoiceHistory() {
     }
   };
 
+  // If user information is not available, display a message indicating no invoices found
   if (!userInfo) {
     return (
       <Layout>
@@ -85,6 +99,7 @@ function InvoiceHistory() {
                 </tr>
               </thead>
               <tbody>
+                {/* Map over fetched invoices to display each invoice */}
                 {invoices.map((invoice) => (
                   <tr key={invoice.InvoiceID}>
                     <td>{invoice.InvoiceNumber}</td>

@@ -1,5 +1,6 @@
 import React from "react";
 
+// This component represents a form for billing service information input
 const BillingServiceInfo = ({
   entityName,
   setEntityName,
@@ -35,8 +36,8 @@ const BillingServiceInfo = ({
           id="entityName"
           placeholder="ENTITY NAME"
           className="form-control mb-1"
-          value={entityName}
-          onChange={(e) => setEntityName(e.target.value)}
+          value={entityName} // Bind input value to the entityName state variable
+          onChange={(e) => setEntityName(e.target.value)} // Update entityName state on change
           required
         />
         <input
@@ -44,8 +45,8 @@ const BillingServiceInfo = ({
           id="entityAddress"
           placeholder="ENTITY ADDRESS"
           className="form-control"
-          value={entityAddress}
-          onChange={(e) => setEntityAddress(e.target.value)}
+          value={entityAddress} // Bind input value to the entityAddress state variable
+          onChange={(e) => setEntityAddress(e.target.value)} // Update entityAddress state on change
           required
         />
       </div>
@@ -55,8 +56,8 @@ const BillingServiceInfo = ({
           id="company"
           placeholder="COMPANY"
           className="form-control"
-          value={payableTo}
-          onChange={(e) => setPayableTo(e.target.value)}
+          value={payableTo} // Bind input value to the payableTo state variable
+          onChange={(e) => setPayableTo(e.target.value)} // Update payableTo state on change
           required
         />
       </div>

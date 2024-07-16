@@ -1,14 +1,18 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+// This component represents a button that navigates to the Account page when clicked
 function AccountButton() {
   console.log("AccountBtn: 1-1");
+
+  // Retrieve the navigate function from the React Router DOM
   const navigate = useNavigate();
 
+  // Function to handle clicks on the Account button
   const handleAccountClick = (event) => {
-    event.preventDefault();
+    event.preventDefault(); // Prevent the default form submission behavior
     console.log("AccountBtn: 1-2");
-    navigate('/Account');
+    navigate('/Account'); // Navigate to the '/Account' route
   }
   return (
     <form onSubmit={handleAccountClick}>

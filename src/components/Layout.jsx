@@ -2,6 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from "./styles/Layout.css";// Ensure you have a CSS file for common styles
 
+/**
+ * LAYOUT Component
+ * This component renders the common theme across the invoice components.
+ */
 const Layout = ({ children }) => {
   return (
     <div className="d-flex justify-content-center align-items-center w-100 vh-100 bg-dark">

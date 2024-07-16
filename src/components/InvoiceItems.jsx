@@ -1,7 +1,12 @@
 import React from "react";
 
+/**
+ * INVOICE ITEMS
+ * This component renders a list of invoice items with input fields for description, address, quantity, and unit price.
+ */
 const InvoiceItems = ({ items, handleItemChange, deleteItem, addItem }) => (
   <div>
+  {/* Header for the items list */}
     <div id="itemsHeader" className="divider py-1 mb-2 bg-dark">
       <div className="d-flex flex-row">
         <div className="col-3 me-2">
@@ -18,8 +23,10 @@ const InvoiceItems = ({ items, handleItemChange, deleteItem, addItem }) => (
         </div>
       </div>
     </div>
+    {/* Mapping over items array to render each item's input fields */}
     {items.map((item, index) => (
       <div id="items" className="d-flex flex-row justify-content-between" key={index}>
+      {/* Description input field */}
         <div className="col-3 me-4">
           <input
             type="text"
@@ -33,6 +40,7 @@ const InvoiceItems = ({ items, handleItemChange, deleteItem, addItem }) => (
             required
           />
         </div>
+        {/* Address input field */}
         <div className="col-3 me-5">
           <input
             type="text"
@@ -46,6 +54,7 @@ const InvoiceItems = ({ items, handleItemChange, deleteItem, addItem }) => (
             required
           />
         </div>
+        {/* Quantity input field */}
         <div className="col-2 me-4">
           <input
             type="text"
@@ -57,6 +66,7 @@ const InvoiceItems = ({ items, handleItemChange, deleteItem, addItem }) => (
             required
           />
         </div>
+        {/* Unit Price input field */}
         <div className="col-">
           <input
             type="text"
@@ -70,6 +80,7 @@ const InvoiceItems = ({ items, handleItemChange, deleteItem, addItem }) => (
             required
           />
         </div>
+        {/* Delete button for removing the item */}
         <div className="col d-flex flex-row align-items-start ms-2">
           <button
             id="delete"
@@ -81,6 +92,7 @@ const InvoiceItems = ({ items, handleItemChange, deleteItem, addItem }) => (
         </div>
       </div>
     ))}
+    {/* Button to add a new item */}
     <div className="d-flex">
       <button
         id="addItem"

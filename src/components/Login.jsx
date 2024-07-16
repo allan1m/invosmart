@@ -8,7 +8,12 @@ import password_icon from "../Assets/password_icon.svg";
 import email_icon from "../Assets/email_icon.svg";
 import business_icon from "../Assets/business_icon.svg";
 
+/**
+ * LOGIN component
+ * It includes handling the user login functionality, state management for form fields, validation, and notifications.
+ */
 function Login() {
+  // useState hooks to manage state for email, password, and their respective errors
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
@@ -17,19 +22,34 @@ function Login() {
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState("");
   const [notificationSeverity, setNotificationSeverity] = useState("success");
+
+  // useNavigate hook to programmatically navigate users
   const navigate = useNavigate(); // Hook for navigation
 
+  /**
+   * Function to validate email format using a regular expression
+   * @param {string} email - The email to validate
+   * @returns {boolean} - True if the email is valid, false otherwise
+   */
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
+  /**
+   * Function to handle the login process
+   * @param {object} event - The form submission event
+   */
   async function handleLogin(event) {
     console.log("Handle Login event");
+
+    // Prevent the default form submission behavior
     event.preventDefault(); // Prevents the default form submission behavior
 
+    // Variable to track the validity of the form
     let isValid = true;
 
+    // Validate the email field
     if (!validateEmail(email)) {
       setEmailError("Invalid email address");
       isValid = false;
@@ -37,8 +57,10 @@ function Login() {
       setEmailError("");
     }
 
+    // If the form is not valid, exit the function
     if (!isValid) return;
 
+    // Object to store user credentials
     const user = {
       clientEmail: email,
       clientPassword: password,
@@ -46,6 +68,7 @@ function Login() {
 
     try {
       console.log("1-1");
+      // Send a POST request to the authentication endpoint
       const response = await fetch(
         // "https://invosmart-be.azurewebsites.net/api/Authentication/LoginClient",
         "http://localhost:5073/api/Authentication/LoginClient",
@@ -59,9 +82,11 @@ function Login() {
       );
       console.log("1-2");
 
+      // Parse the JSON response from the server
       const data = await response.json();
       console.log(data);
 
+      // Check if the login attempt was unsuccessful
       if (data === "Fail") {
         console.log("UNSUCCESSFUL LOG ATTEMPT.");
         // Display success notification
@@ -99,6 +124,9 @@ function Login() {
     }
   }
 
+   /**
+   * Function to handle closing the notification Snackbar
+   */
   const handleCloseNotification = () => {
     setNotificationOpen(false);
   };

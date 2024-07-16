@@ -7,13 +7,17 @@ import InvoiceForm from "./InvoiceForm";
 import InvoiceDialog from "./InvoiceDialog";
 import styles from "./styles/Invoice.css";
 
+// This component represents the main Invoice page of the application.
 function Invoice() {
-  const [openDialog, setOpenDialog] = useState(false);
-  const [reviewData, setReviewData] = useState(null);
+  // State variables using useState hook
+  const [openDialog, setOpenDialog] = useState(false); // State for controlling dialog visibility
+  const [reviewData, setReviewData] = useState(null); // State for storing data to review
 
+  // Retrieve user info from localStorage if available
   const storedUserInfo = localStorage.getItem("userInfo");
   const userInfo = storedUserInfo ? JSON.parse(storedUserInfo) : null;
 
+  // useEffect hook to load stored invoice data when openDialog changes
   useEffect(() => {
     const storedInvoiceData = localStorage.getItem("invoiceData");
     if (storedInvoiceData) {
@@ -21,9 +25,10 @@ function Invoice() {
     }
   }, [openDialog]);
 
+  // Function to handle review button click
   const handleReview = (data) => {
-    setReviewData(data);
-    setOpenDialog(true);
+    setReviewData(data); // Update reviewData state with received data
+    setOpenDialog(true); // Open the dialog for reviewing the invoice
   };
 
   return (

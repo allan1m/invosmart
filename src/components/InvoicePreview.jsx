@@ -1,7 +1,14 @@
 import React from "react";
 
+/**
+ * INVOICE PREVIEW
+ * This component renders an invoice preview form based on reviewData and userInfo props.
+ */
 const InvoicePreview = ({ reviewData, userInfo }) => {
-    console.log(reviewData);
+  // Log reviewData to console for debugging purposes
+  console.log(reviewData);
+
+  // Render the invoice preview form
   return (
     <form id="invoice" className="p-5">
       <ClientInfo userInfo={userInfo} />
@@ -12,6 +19,7 @@ const InvoicePreview = ({ reviewData, userInfo }) => {
   );
 };
 
+// Component to display client information
 const ClientInfo = ({ userInfo }) => (
     <div className="row d-flex justify-content-between mb-5">
       <div className="col-5 position mb-3">
@@ -28,6 +36,7 @@ const ClientInfo = ({ userInfo }) => (
     </div>
   );
 
+  // Component to display invoice header information
 const InvoiceHeader = ({ reviewData }) => (
   <div>
     <div className="divider py-1 mb-2 bg-dark">
@@ -78,6 +87,7 @@ const InvoiceHeader = ({ reviewData }) => (
   </div>
 );
 
+// Component to display invoice items
 const InvoiceItems = ({ reviewData }) => (
   <div>
     <div id="itemsHeader" className="divider py-1 mb-2 bg-dark">
@@ -96,6 +106,7 @@ const InvoiceItems = ({ reviewData }) => (
         </div>
       </div>
     </div>
+    {/* Mapping over items array to render each item's details */}
     {reviewData.items.map((item, index) => (
       <ul key={index}>
         <div id="items" className="d-flex flex-row">
@@ -118,6 +129,7 @@ const InvoiceItems = ({ reviewData }) => (
   </div>
 );
 
+// Component to display invoice total
 const InvoiceTotal = ({ reviewData }) => (
   <div>
     <div className="divider py-1 mt-5">

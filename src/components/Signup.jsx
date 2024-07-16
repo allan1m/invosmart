@@ -8,6 +8,12 @@ import email_icon from "../Assets/email_icon.svg";
 import business_icon from "../Assets/business_icon.svg";
 import phone_icon from "../Assets/phone-icon.svg";
 
+/**
+ * SIGN-UP
+ * This component is responsible for creating a new user account.
+ * It includes basic information about the user, such as email and password.
+ * in addition to business information, such as company name, address, and phone number.
+ */
 function Signup() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");

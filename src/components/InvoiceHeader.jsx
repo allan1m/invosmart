@@ -1,5 +1,9 @@
 import React from 'react'
 
+/**
+ * INVOICE HEADER
+ * This component displays the header section of the invoice form, including the invoice number and current date.
+ */
 const InvoiceHeader = ({ invoiceNumber, setInvoiceNumber, today }) => (
     <div className="divider py-1 mb-2 bg-dark">
       <div className="d-flex flex-row">

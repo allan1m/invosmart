@@ -7,11 +7,17 @@ import TotalDue from "./TotalDue";
 import FormButton from "./FormButton";
 import styles from "./styles/Invoice.css";
 
+/**
+ * INVOICE 
+ * This component represents a form for creating an invoice, including client information, invoice details, and itemization.
+ */
 function InvoiceForm({onReview}) {
+  // Retrieve user info from local storage or set to null if not available
   const storedUserInfo = localStorage.getItem("userInfo");
   const userInfo = storedUserInfo ? JSON.parse(storedUserInfo) : null;
   console.log(userInfo);
 
+  // Destructure user info or set defaults
   const firstName = userInfo ? userInfo.FirstName : "";
   const lastName = userInfo ? userInfo.LastName : "";
   const email = userInfo ? userInfo.Email : "";
@@ -22,24 +28,26 @@ function InvoiceForm({onReview}) {
   const state = userInfo ? userInfo.CompanyState : "";
   const zip = userInfo ? userInfo.CompanyZipCode : "";
 
+  // Set up current date for invoice creation
   const date = new Date();
   const today = date.toLocaleDateString("en-US", {
     month: "numeric",
     day: "numeric",
     year: "numeric",
   });
-  const invoiceDay = date.getDay();
-  console.log(invoiceDay);
-  const invoiceMonth = date.getMonth() + 1;
-  console.log(invoiceMonth);
-  const invoiceYear = date.getFullYear();
-  console.log(invoiceYear);
-  const invoiceDate = `${invoiceMonth}${invoiceYear}`;
-  console.log(invoiceDate);
-  // const dueDate = `${invoiceMonth}${invoiceDay}${invoiceYear}`;
 
+  // Initialize invoice details
+  const invoiceDay = date.getDay(); // Day of the week (0-6)
+  console.log(invoiceDay);
+  const invoiceMonth = date.getMonth() + 1; // Month (1-12)
+  console.log(invoiceMonth);
+  const invoiceYear = date.getFullYear(); // Full year (YYYY)
+  console.log(invoiceYear);
+  const invoiceDate = `${invoiceMonth}${invoiceYear}`; // Concatenate month and year for invoice date
+  console.log(invoiceDate);
+
+  // State variables to manage invoice form data
   const [invoiceNumber, setInvoiceNumber] = useState(`${invoiceDate}1001`);
-//   const [subTotal, setSubTotal] = useState("$00.00");
   const [dueDate, setDueDate] = useState(`${today}`);
   const [total, setTotal] = useState("$00.00");
   const [submittedOn, setSubmittedOn] = useState(`${today}`);
@@ -48,12 +56,12 @@ function InvoiceForm({onReview}) {
   const [payableTo, setPayableTo] = useState("");
   const [servicesRendered, setServicesRendered] = useState("");
 
-  // State to manage rows of items
+  // State to manage rows of invoice items
   const [items, setItems] = useState([
     { description: "", address: "", qty: "", unitPrice: "" },
   ]);
 
-   // Function to handle adding a new item row
+   // Function to add a new item row to the invoice
    const addItem = () => {
     setItems([
       ...items,
@@ -77,7 +85,7 @@ function InvoiceForm({onReview}) {
     setTotal(`$${newTotal.toFixed(2)}`);
   };
 
-  // Function to handle input change
+  // Function to handle input change for invoice items
   const handleItemChange = (index, field, value) => {
     const newItems = [...items];
     newItems[index][field] = value;
@@ -85,7 +93,7 @@ function InvoiceForm({onReview}) {
     updateTotal(newItems); // Update total when item changes
   };
 
-  // Function to update total based on item changes
+  // Function to update total amount based on item changes
   const updateTotal = (items) => {
     let totalAmount = 0;
     items.forEach((item) => {
@@ -99,15 +107,15 @@ function InvoiceForm({onReview}) {
   };
 
   
-  // Function to handle form submission
+  // Function to handle form submission of the invoice
   const handleInvoiceSubmit = (event) => {
     event.preventDefault();
 
     const invoiceData = {
-      ClientID: userInfo.ClientID, // Assuming ClientID is part of userInfo
+      ClientID: userInfo.ClientID, 
       InvoiceNumber: invoiceNumber,
       InvoiceDate: today,
-      DueDate: dueDate, // You can set the due date as needed
+      DueDate: dueDate,
       BilledToEntityName: entityName,
       BilledToEntityAddress: entityAddress,
       PayableTo: payableTo,
@@ -122,7 +130,7 @@ function InvoiceForm({onReview}) {
       })),
     };
 
-
+    // Example fetch request to send invoiceData to an API endpoint for processing
     fetch("http://localhost:5073/api/Invoice/CreateInvoice", {
       method: "POST",
       headers: {
@@ -141,11 +149,13 @@ function InvoiceForm({onReview}) {
       });
   };
 
+  // Function to save form data to local storage
   const saveFormData = () => {
     const invoiceData = getFormData();
     localStorage.setItem("invoiceData", JSON.stringify(invoiceData));
   };
 
+  // Function to retrieve form data
   const getFormData = () => ({   
     invoiceNumber,
     today,
@@ -164,10 +174,11 @@ function InvoiceForm({onReview}) {
     })),
   });
 
+  // Function to handle review of the invoice before submission
   const handleInvoiceReview = (event) => {
     event.preventDefault();
-    saveFormData();
-    onReview(getFormData());
+    saveFormData(); // Save form data to local storage
+    onReview(getFormData()); // Trigger review callback with form data
   };
 
   return (
