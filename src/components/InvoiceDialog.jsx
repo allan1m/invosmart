@@ -76,7 +76,7 @@ const InvoiceDialog = ({ openDialog, setOpenDialog, reviewData, userInfo }) => {
     };
 
     // Send POST request to API endpoint for invoice creation
-    fetch("http://localhost:5073/api/Invoice/CreateInvoice", {
+    fetch("https://invosmart-be.azurewebsites.net/api/invoice/Invoice/CreateInvoice", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

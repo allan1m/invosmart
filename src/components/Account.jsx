@@ -1,6 +1,7 @@
 import React, { useState } from "react"; // Importing React and useState hook
 import Layout from "./Layout"; // Importing the Layout component
 import InvoiceButton from "./InvoiceButton"; // Importing the InvoiceButton component
+import { Snackbar, Alert } from "@mui/material";
 import "./styles/Account.css"; // Importing the CSS file for styling
 
 /**
@@ -11,6 +12,11 @@ function Account() {
   // Retrieving stored user info from local storage and parsing it
   const storedUserInfo = localStorage.getItem("userInfo");
   const userInfo = storedUserInfo ? JSON.parse(storedUserInfo) : null;
+
+  // useState hooks to manage errors
+  const [notificationOpen, setNotificationOpen] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState("");
+  const [notificationSeverity, setNotificationSeverity] = useState("success");
 
   // Initializing the state with the user info
   const [userData, setUserData] = useState(userInfo);
@@ -60,14 +66,15 @@ function Account() {
       CompanyAddress: "clientCompanyAddress",
       CompanyCity: "clientCompanyCity",
       CompanyState: "clientCompanyState",
-      CompanyZipCode: "clientCompanyZipCode"
+      CompanyZipCode: "clientCompanyZipCode",
     };
 
     const updatedData = {}; // Initializes an empty object to store the updated user data
 
     // Loop through user data and collect ONLY the changed values
     Object.keys(userData).forEach((key) => {
-      if (userData[key] !== userInfo[key]) { // Checks if the value has changed compared to the original user info
+      if (userData[key] !== userInfo[key]) {
+        // Checks if the value has changed compared to the original user info
         const sqlKey = keyMapping[key] || key; // Use the mapped key or default to the original key if no mapping is found
         updatedData[sqlKey] = userData[key]; // Adds the changed value to the updatedData object
       }
@@ -82,22 +89,37 @@ function Account() {
       // Checks if there are any changes
       console.log("Submitting updated data:", updatedData); // Logs the updated data for debugging
       // Optionally, you can also send this data to the server via an API call
-      fetch("http://localhost:5073/api/Authentication/UpdateUserInfo", {
-        // Makes a POST request to the server to update user info
-        method: "POST", // Specify the request method, in this case it is POST
-        headers: {
-          "Content-Type": "application/json", // Sets the request headers to indicate JSON data
-        },
-        body: JSON.stringify(updatedData), // Converts the updatedData object to a JSON string for the request body
-      })
+      fetch(
+        "https://invosmart-be.azurewebsites.net/api/auth/Authentication/UpdateUserInfo",
+        {
+          // Makes a POST request to the server to update user info
+          method: "POST", // Specify the request method, in this case it is POST
+          headers: {
+            "Content-Type": "application/json", // Sets the request headers to indicate JSON data
+          },
+          body: JSON.stringify(updatedData), // Converts the updatedData object to a JSON string for the request body
+        }
+      )
         .then((response) => response.json()) // Parses the JSON response from the server
         .then((data) => {
           console.log("Success:", data); // Logs the success message and data returned from the server
           // Update local storage if the API call is successful with the new user data
           localStorage.setItem("userInfo", JSON.stringify(userData));
+
+          // Set notification message for success
+          setNotificationMessage("Change made successfully!");
+          setNotificationSeverity("success");
+          setNotificationOpen(true); // Open notification
         })
         .catch((error) => {
           console.error("Error:", error); // Logs any errors that occur during the fetch request
+
+          // Set notification message for success
+          setNotificationMessage(
+            "Failed to make changes. Please try again later."
+          );
+          setNotificationSeverity("success");
+          setNotificationOpen(true); // Open notification
         });
 
       // For demonstration purposes, we update local storage directly
@@ -115,6 +137,13 @@ function Account() {
   const half = Math.ceil(userInfoKeys.length / 2);
   const firstHalfKeys = userInfoKeys.slice(0, half);
   const secondHalfKeys = userInfoKeys.slice(half);
+
+  /**
+   * Function to handle closing the notification Snackbar
+   */
+  const handleCloseNotification = () => {
+    setNotificationOpen(false);
+  };
 
   return (
     <Layout>
@@ -156,6 +185,20 @@ function Account() {
               />
             </div>
           ))}
+          <Snackbar
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            open={notificationOpen} // Set notification open state
+            autoHideDuration={3000} // Set duration to auto hide notification
+            onClose={handleCloseNotification} // Handle notification close event
+          >
+            <Alert
+              onClose={handleCloseNotification}
+              severity={notificationSeverity} // Set notification severity
+              sx={{ width: "100%" }}
+            >
+              {notificationMessage}
+            </Alert>
+          </Snackbar>
           <div className="d-flex flex-row-reverse position-relative">
             <button type="submit" className="btn btn-dark w-100 mt-4 p-3">
               Save Changes

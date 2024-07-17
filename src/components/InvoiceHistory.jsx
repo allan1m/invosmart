@@ -32,7 +32,7 @@ function InvoiceHistory() {
   const fetchInvoices = async (ClientID) => {
     try {
       const response = await fetch(
-        `http://localhost:5073/api/Invoice/GetInvoices?clientID=${userInfo.ClientID}`,
+        `https://invosmart-be.azurewebsites.net/api/invoice/Invoice/GetInvoices?clientID=${userInfo.ClientID}`,
         {
           method: "GET",
           headers: {

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Snackbar, Alert } from "@mui/material";
 import "./styles/Login-Signup.css";
 
 import user_icon from "../Assets/user_icon.svg";
@@ -25,31 +26,60 @@ function Signup() {
   const [companyZip, setCompanyZip] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+  const [emailError, setEmailError] = useState(""); // state for email error
+  const [passwordError, setPasswordError] = useState(""); // state for password error
+  const [phoneError, setPhoneError] = useState(""); // State for phone errors
   const [signupError, setSignupError] = useState(""); // State for signup errors
+  const [notificationOpen, setNotificationOpen] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState("");
+  const [notificationSeverity, setNotificationSeverity] = useState("success");
   const [step, setStep] = useState(1); // State for form steps
   const navigate = useNavigate(); // Hook for navigation
 
   /**
    * Method to validate email
+   * Using test() to know whether a pattern is found in a email string. test() returns
+   * a boolean (which returns the index of a match, or -1 if not found).
    */
   const validateEmail = (email) => {
+    // he test() method of RegExp instances executes a search with this regular expression
+    // for a match between a regular expression and a specified string. Returns true if
+    // there is a match; false otherwise.
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
 
   /**
    * Method to validate password
+   * Using test() to know whether a pattern is found in a password string. test() returns
+   * a boolean (which returns the index of a match, or -1 if not found).
    */
   const validatePassword = (password) => {
+    // he test() method of RegExp instances executes a search with this regular expression
+    // for a match between a regular expression and a specified string. Returns true if
+    // there is a match; false otherwise.
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,255}$/;
     return passwordRegex.test(password);
   };
 
   /**
+   * Method to validate phone number
+   * Using test() to know whether a pattern is found in a password string. test() returns
+   * a boolean (which returns the index of a match, or -1 if not found).
+   */
+  const validatePhone = (phone) => {
+    // he test() method of RegExp instances executes a search with this regular expression
+    // for a match between a regular expression and a specified string. Returns true if
+    // there is a match; false otherwise.
+    const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/;
+    return phoneRegex.test(phone);
+  };
+
+  /**
    * Method to handle validation of the first form
+   * This method is use to validate the first form, particularly
+   * the email, password, and phone numbers fields.
    */
   const handleFirstForm = (event) => {
     event.preventDefault(); // Prevents the default form submission behavior
@@ -70,6 +100,15 @@ function Signup() {
       isValid = false;
     } else {
       setPasswordError("");
+    }
+
+    if (!validatePhone(phone)) {
+      setPhoneError(
+        "Invalid phone number format. Expected format: (123) 456-7890"
+      );
+      isValid = false;
+    } else {
+      setPhoneError("");
     }
 
     if (isValid) {
@@ -118,14 +157,15 @@ function Signup() {
       newClientCompanyZipCode: companyZip,
       newClientPhoneNumber: phone,
       newClientEmail: email,
-      newClientPassword: password
+      newClientPassword: password,
     };
     console.log(user);
 
     try {
       console.log("Inside try statement");
       const response = await fetch(
-        "http://localhost:5073/api/Authentication/SignupClient",
+        // "http://localhost:5073/api/Authentication/SignupClient"
+        "https://invosmart-be.azurewebsites.net/api/auth/Authentication/SignupClient",
         {
           method: "POST",
           headers: {
@@ -156,17 +196,26 @@ function Signup() {
         console.log(token);
         console.log(userInfo);
 
+        setNotificationMessage("Successfully created account");
+        setNotificationSeverity("success");
+        setNotificationOpen(true);
         // Redirect or navigate to another page
-        navigate("/InvoiceMain");
+        navigate("/Invoice");
       } else {
         console.log("Error: " + data);
-        setSignupError(
-          "Unable to create a new account. Please try again later."
-        );
+        // Display success notification
+        setNotificationMessage("Failed to create account. Please try again.");
+        setNotificationSeverity("error");
+        setNotificationOpen(true);
       }
     } catch (error) {
       console.error("Error:", error);
-      setSignupError("Something went wrong. Please try again later.");
+      // Display success notification
+      setNotificationMessage(
+        "Unable to create account. Please try again later."
+      );
+      setNotificationSeverity("error");
+      setNotificationOpen(true);
     }
   }
 
@@ -177,6 +226,13 @@ function Signup() {
     setStep(1);
   };
 
+  /**
+   * Function to handle closing the notification Snackbar
+   */
+  const handleCloseNotification = () => {
+    setNotificationOpen(false);
+  };
+
   return (
     <div className="login template d-flex justify-content-center align-items-center w-100 vh-100 bg-dark">
       <div className="form-container p-5 rounded bg-white">
@@ -184,11 +240,7 @@ function Signup() {
           <form onSubmit={handleFirstForm}>
             <h3 className="text-center">Sign up</h3>
             <div className="mb-2">
-              <img
-                class="icon"
-                src={user_icon}
-                alt="icon representing user"
-              />
+              <img class="icon" src={user_icon} alt="icon representing user" />
               <input
                 type="text"
                 id="firstName"
@@ -222,6 +274,7 @@ function Signup() {
                 onChange={(e) => setPhone(e.target.value)}
                 required
               />
+              {phoneError && <p className="text-danger">{phoneError}</p>}
               <img
                 class="icon"
                 src={email_icon}
@@ -339,7 +392,20 @@ function Signup() {
                 onChange={(e) => setCompanyZip(e.target.value)}
                 required
               />
-              {signupError && <p className="text-danger">{signupError}</p>}
+              <Snackbar
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                open={notificationOpen}
+                autoHideDuration={6000}
+                onClose={handleCloseNotification}
+              >
+                <Alert
+                  onClose={handleCloseNotification}
+                  severity={notificationSeverity}
+                  sx={{ width: "100%" }}
+                >
+                  {notificationMessage}
+                </Alert>
+              </Snackbar>
               <div className="d-grid">
                 <button className="btn btn-dark" type="submit">
                   Sign Up
@@ -352,12 +418,12 @@ function Signup() {
                 Don't have an account? <Link to="./Signup">Sign up</Link>
               </p>
               <button
-                  className="btn btn-dark"
-                  type="button"
-                  onClick={handleBack}
-                >
-                  Back
-                </button>
+                className="btn btn-dark"
+                type="button"
+                onClick={handleBack}
+              >
+                Back
+              </button>
             </div>
           </form>
         )}

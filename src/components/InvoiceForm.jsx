@@ -106,49 +106,6 @@ function InvoiceForm({onReview}) {
     setTotal(`$${totalAmount.toFixed(2)}`);
   };
 
-  
-  // Function to handle form submission of the invoice
-  const handleInvoiceSubmit = (event) => {
-    event.preventDefault();
-
-    const invoiceData = {
-      ClientID: userInfo.ClientID, 
-      InvoiceNumber: invoiceNumber,
-      InvoiceDate: today,
-      DueDate: dueDate,
-      BilledToEntityName: entityName,
-      BilledToEntityAddress: entityAddress,
-      PayableTo: payableTo,
-      ServicesRendered: servicesRendered,
-      SubmittedOn: submittedOn,
-      Total: parseFloat(total.replace("$", "")),
-      Items: items.map((item) => ({
-        Description: item.description,
-        Address: item.address,
-        Quantity: parseFloat(item.qty),
-        UnitPrice: parseFloat(item.unitPrice),
-      })),
-    };
-
-    // Example fetch request to send invoiceData to an API endpoint for processing
-    fetch("http://localhost:5073/api/Invoice/CreateInvoice", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(invoiceData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Success:", data);
-        // Handle successS
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        // Handle error
-      });
-  };
-
   // Function to save form data to local storage
   const saveFormData = () => {
     const invoiceData = getFormData();
