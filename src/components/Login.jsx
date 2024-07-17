@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Snackbar, Alert } from "@mui/material";
 import "./styles/Login-Signup.css";
@@ -23,6 +23,9 @@ function Login() {
   const [notificationMessage, setNotificationMessage] = useState("");
   const [notificationSeverity, setNotificationSeverity] = useState("success");
 
+  // State to manage visibility of links based on screen size
+  const [showLinks, setShowLinks] = useState(true);
+
   // useNavigate hook to programmatically navigate users
   const navigate = useNavigate(); // Hook for navigation
 
@@ -41,16 +44,17 @@ function Login() {
    * @param {object} event - The form submission event
    */
   async function handleLogin(event) {
-    console.log("Handle Login event");
-
     // Prevent the default form submission behavior
     event.preventDefault(); // Prevents the default form submission behavior
+
+    console.log("handleLogin: 1-1");
 
     // Variable to track the validity of the form
     let isValid = true;
 
     // Validate the email field
     if (!validateEmail(email)) {
+      console.log("Invalid Email");
       setEmailError("Invalid email address");
       isValid = false;
     } else {
@@ -67,11 +71,11 @@ function Login() {
     };
 
     try {
-      console.log("1-1");
+      console.log("Try Statement: 1-1");
       // Send a POST request to the authentication endpoint
       const response = await fetch(
-        "https://invosmart-be.azurewebsites.net/api/auth/Authentication/LoginClient",
-        // "http://localhost:5073/api/Authentication/LoginClient",
+        // "https://invosmart-be.azurewebsites.net/api/auth/Authentication/LoginClient",
+        "http://localhost:5073/api/auth/Authentication/LoginClient",
         {
           method: "POST",
           headers: {
@@ -88,9 +92,11 @@ function Login() {
 
       // Check if the login attempt was unsuccessful
       if (data === "Fail") {
-        console.log("UNSUCCESSFUL LOG ATTEMPT.");
+        console.log("UNSUCCESSFUL LOG IN ATTEMPT.");
         // Display success notification
-        setNotificationMessage("Incorrect email and/ or password. Please try again.");
+        setNotificationMessage(
+          "Incorrect email and/ or password. Please try again."
+        );
         setNotificationSeverity("error");
         setNotificationOpen(true);
       } else if (data.Token) {
@@ -116,20 +122,48 @@ function Login() {
         }, 1000);
       } else {
         console.log("Error: " + data);
-        setSignupError("Unable to login. Please try again later.");
+        // Set notification message for error
+        setNotificationMessage("Something went wrong. Please try again.");
+        setNotificationSeverity("error");
+        setNotificationOpen(true); // Open notification
       }
     } catch (error) {
       console.error("Error:", error);
-      setSignupError("Something went wrong. Please try again later.");
+      // Set notification message for error
+      setNotificationMessage(
+        "Unable to process request at this time. Please try again later."
+      );
+      setNotificationSeverity("error");
+      setNotificationOpen(true); // Open notification
     }
   }
 
-   /**
+  /**
    * Function to handle closing the notification Snackbar
    */
   const handleCloseNotification = () => {
     setNotificationOpen(false);
   };
+
+  // Function to handle screen size change and update state
+  const handleResize = () => {
+    if (window.innerWidth < 550) {
+      setShowLinks(false);
+    } else {
+      setShowLinks(true);
+    }
+  };
+
+  // Effect to set initial state and listen for resize events
+  useEffect(() => {
+    handleResize(); // Set initial state
+
+    window.addEventListener("resize", handleResize); // Listen for resize events
+
+    return () => {
+      window.removeEventListener("resize", handleResize); // Clean up event listener
+    };
+  }, []);
 
   return (
     <div className="login template d-flex justify-content-center align-items-center w-100 vh-100 bg-dark">
@@ -173,7 +207,7 @@ function Login() {
             </button>
           </div>
           <Snackbar
-            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
             open={notificationOpen}
             autoHideDuration={6000}
             onClose={handleCloseNotification}
@@ -186,12 +220,16 @@ function Login() {
               {notificationMessage}
             </Alert>
           </Snackbar>
-          <p className="text-end mt-2">
-            Forgot <a href="">Password?</a>
-          </p>
-          <p className="text-end mt-2">
-            Don't have an account? <Link to="./Signup">Sign up</Link>
-          </p>
+          {showLinks && (
+            <>
+              <p className="text-end mt-2">
+                Forgot <a href="">Password?</a>
+              </p>
+              <p className="text-end mt-2">
+                Don't have an account? <Link to="./Signup">Sign up</Link>
+              </p>
+            </>
+          )}
         </form>
       </div>
     </div>

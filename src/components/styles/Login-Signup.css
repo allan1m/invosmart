@@ -38,6 +38,24 @@ input[type="text"]::placeholder{
 
 @media screen and (max-width: 700px){
     .form-container{
-        width: 45%;
+        width: 50%;
+    }
+}
+
+@media screen and (max-width: 600px){
+    .form-container{
+        width: 40%;
+    }
+    .form-container input::placeholder{
+        color: transparent;
+    }
+}
+
+@media screen and (max-width: 550px){
+    .form-container{
+        width: 40%;
+    }
+    .form-container input::placeholder{
+        color: transparent;
     }
 }

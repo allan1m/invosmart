@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import styles from "./styles/Invoice.css";
 
 // This component represents a button that navigates to the Account page when clicked
 function AccountButton() {
@@ -15,10 +16,10 @@ function AccountButton() {
     navigate('/Account'); // Navigate to the '/Account' route
   }
   return (
-    <form onSubmit={handleAccountClick}>
-      <div className="d-flex flex-row-reverse position-relative pb-0">
+    <form className="account-form-button"onSubmit={handleAccountClick}>
+      <div className="account-container d-flex flex-row-reverse position-relative pb-0">
         <button
-          className="position-relative ps-5 pe-5 mt-3 btn btn-dark"
+          className="account-button position-relative ps-5 pe-5 mt-3 btn btn-dark"
           type="submit"
         >
           Account
