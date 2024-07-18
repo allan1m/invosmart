@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Snackbar, Alert } from "@mui/material";
+import InputMask from "react-input-mask";
 import "./styles/Login-Signup.css";
 
 import user_icon from "../Assets/user_icon.svg";
@@ -244,7 +245,7 @@ function Signup() {
               <input
                 type="text"
                 id="firstName"
-                placeholder="Enter First Name"
+                placeholder="First Name"
                 className="form-control mb-2"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
@@ -254,7 +255,7 @@ function Signup() {
               <input
                 type="text"
                 id="lastName"
-                placeholder="Enter Last Name"
+                placeholder="Last Name"
                 className="form-control mb-2"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
@@ -265,15 +266,21 @@ function Signup() {
                 src={phone_icon}
                 alt="icon representing phone"
               />
-              <input
-                type="tel"
-                id="phone"
-                placeholder="Enter Company Phone Number"
-                className="form-control mb-2"
+              <InputMask
+                mask="(999) 999-9999"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                required
-              />
+              >
+                {() => (
+                  <input
+                    type="tel"
+                    id="phone"
+                    placeholder="Phone Number"
+                    className="form-control mb-2"
+                    required
+                  />
+                )}
+              </InputMask>
               {phoneError && <p className="text-danger">{phoneError}</p>}
               <img
                 class="icon"
@@ -283,7 +290,7 @@ function Signup() {
               <input
                 type="email"
                 id="email"
-                placeholder="Enter Company Email"
+                placeholder="Email"
                 className="form-control mb-2"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -298,7 +305,7 @@ function Signup() {
               <input
                 type="password"
                 id="password"
-                placeholder="Enter Password"
+                placeholder="Password"
                 className="form-control mb-2"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
