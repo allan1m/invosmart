@@ -6,11 +6,11 @@ import React from 'react'
  */
 const InvoiceHeader = ({ invoiceNumber, setInvoiceNumber, today }) => (
     <div className="divider py-1 mb-2 bg-dark">
-      <div className="d-flex flex-row">
+      <div className="invoice-number-container d-flex flex-row">
         <div className="flex-col">
-          <h3 className="ps-3 text-white">Invoice No.</h3>
+          <h3 className="invoice-num-1 ps-3 text-white">Invoice No.</h3>
         </div>
-        <div className="col d-flex align-items-center ps-3">
+        <div className="invoice-number-input col d-flex align-items-center ps-3">
           <input
             required
             className="form-control"
@@ -22,7 +22,7 @@ const InvoiceHeader = ({ invoiceNumber, setInvoiceNumber, today }) => (
           />
         </div>
         <div className="col d-flex flex-row-reverse">
-          <h2 className="text-center pe-5 text-white">{today}</h2>
+          <h2 className="todays-date text-center pe-5 text-white">{today}</h2>
         </div>
       </div>
     </div>

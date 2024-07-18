@@ -14,7 +14,7 @@ const BillingServiceInfo = ({
   setSubmittedOn,
 }) => (
   <div>
-    <div className="row ps-3">
+    <div className="bill-info-header row ps-3">
       <div className="col">
         <h3 className="text-left fw-bold"> BILL TO </h3>
       </div>
@@ -29,12 +29,12 @@ const BillingServiceInfo = ({
       </div>
     </div>
     <hr className="mt-0" />
-    <div className="row mb-5">
+    <div className="billing-info row mb-5">
       <div className="col">
         <input
           type="text"
           id="entityName"
-          placeholder="ENTITY NAME"
+          placeholder="BILL TO NAME"
           className="form-control mb-1"
           value={entityName} // Bind input value to the entityName state variable
           onChange={(e) => setEntityName(e.target.value)} // Update entityName state on change
@@ -43,7 +43,7 @@ const BillingServiceInfo = ({
         <input
           type="text"
           id="entityAddress"
-          placeholder="ENTITY ADDRESS"
+          placeholder="BILL TO ADDRESS"
           className="form-control"
           value={entityAddress} // Bind input value to the entityAddress state variable
           onChange={(e) => setEntityAddress(e.target.value)} // Update entityAddress state on change
@@ -54,7 +54,7 @@ const BillingServiceInfo = ({
         <input
           type="text"
           id="company"
-          placeholder="COMPANY"
+          placeholder="PAYABLE TO COMPANY"
           className="form-control"
           value={payableTo} // Bind input value to the payableTo state variable
           onChange={(e) => setPayableTo(e.target.value)} // Update payableTo state on change
@@ -65,7 +65,7 @@ const BillingServiceInfo = ({
         <input
           type="text"
           id="service"
-          placeholder="Service Rendered"
+          placeholder="SERVICE"
           className="form-control"
           value={servicesRendered}
           onChange={(e) => setServicesRendered(e.target.value)}

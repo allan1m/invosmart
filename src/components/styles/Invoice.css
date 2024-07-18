@@ -136,3 +136,31 @@ input .form-control {
     color: green;
   }
 }
+
+@media screen and (max-width: 750px) {
+  /* INVOICE # AND DATE */
+  .invoice-number-container h3{
+    display: none;
+  }
+  /* BILLING INFO */
+  .bill-info-header h3, hr{
+    display: none;
+  }
+  .billing-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .billing-info .col {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .billing-info .col h3 {
+    margin-bottom: 0.5rem;
+  }
+
+  .billing-info .col input {
+    margin-bottom: 1rem;
+  }
+}

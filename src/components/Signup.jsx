@@ -337,7 +337,7 @@ function Signup() {
               <input
                 type="text"
                 id="company"
-                placeholder="Enter Company Name"
+                placeholder="Company Name"
                 className="form-control mb-2"
                 value={company}
                 onChange={(e) => setCompany(e.target.value)}
@@ -351,7 +351,7 @@ function Signup() {
               <input
                 type="text"
                 id="company-address"
-                placeholder="Enter Address"
+                placeholder="Address"
                 className="form-control mb-2"
                 value={companyAddress}
                 onChange={(e) => setCompanyAddress(e.target.value)}
@@ -365,7 +365,7 @@ function Signup() {
               <input
                 type="text"
                 id="company-city"
-                placeholder="Enter City"
+                placeholder="City"
                 className="form-control mb-2"
                 value={companyCity}
                 onChange={(e) => setCompanyCity(e.target.value)}
@@ -379,7 +379,7 @@ function Signup() {
               <input
                 type="text"
                 id="company-state"
-                placeholder="Enter State"
+                placeholder="State"
                 className="form-control mb-2"
                 value={companyState}
                 onChange={(e) => setCompanyState(e.target.value)}
@@ -393,7 +393,7 @@ function Signup() {
               <input
                 type="text"
                 id="company-zip"
-                placeholder="Enter Zip Code"
+                placeholder="Zip"
                 className="form-control mb-2"
                 value={companyZip}
                 onChange={(e) => setCompanyZip(e.target.value)}

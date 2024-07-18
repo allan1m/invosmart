@@ -72,14 +72,14 @@ function InvoiceHistory() {
   return (
     <Layout>
       <div className="invoice-history-page">
-      <div className="d-flex flex-row justify-content-evenly m-3">
-        <h3 className="col-7 text-left">InvoSmart</h3>
-        <div className="col-2 ps-5 ms-3">
-        <AccountButton />
-        </div>
-        <div className="">
-        <InvoiceButton />
-        </div>
+        <div className="history-header d-flex flex-row justify-content-evenly m-3">
+          <h3 className="col-7 text-left">InvoSmart</h3>
+          <div className="col-2 ps-5 ms-3">
+            <AccountButton />
+          </div>
+          <div className="">
+            <InvoiceButton />
+          </div>
         </div>
         <h3 className="text-left mb-3">Invoice History for {company}</h3>
         <div className="table-responsive">
@@ -87,15 +87,15 @@ function InvoiceHistory() {
             <table className="table table-striped table-sm align-middle">
               <thead className="table-primary">
                 <tr>
-                  <th>Invoice Number</th>
-                  <th>Invoice Date</th>
-                  <th>Due Date</th>
-                  <th>Billed To</th>
-                  <th>Billing Address</th>
-                  <th>Payable To</th>
-                  <th>Services</th>
-                  <th>Subtotal</th>
-                  <th>Total</th>
+                  <th className="column-1">Invoice Number</th>
+                  <th className="column-2">Invoice Date</th>
+                  <th className="column-3">Due Date</th>
+                  <th className="column-4">Billed To</th>
+                  <th className="column-5">Billing Address</th>
+                  <th className="column-6">Payable To</th>
+                  <th className="column-7">Services</th>
+                  <th className="column-8">Subtotal</th>
+                  <th className="column-9">Total</th>
                 </tr>
               </thead>
               <tbody>
