@@ -5,7 +5,6 @@ import InvoiceHistoryButton from "./InvoiceHistoryButton";
 import Logout from "./Logout";
 import InvoiceForm from "./InvoiceForm";
 import InvoiceDialog from "./InvoiceDialog";
-import styles from "./styles/Invoice.css";
 
 // This component represents the main Invoice page of the application.
 function Invoice() {
@@ -16,6 +15,8 @@ function Invoice() {
   // Retrieve user info from localStorage if available
   const storedUserInfo = localStorage.getItem("userInfo");
   const userInfo = storedUserInfo ? JSON.parse(storedUserInfo) : null;
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1000); // State to track screen size
 
   // useEffect hook to load stored invoice data when openDialog changes
   useEffect(() => {
@@ -31,20 +32,49 @@ function Invoice() {
     setOpenDialog(true); // Open the dialog for reviewing the invoice
   };
 
+  // useEffect hook to update isMobile state on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1000);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <Layout>
-    <div className="table-responsive">
-    <table className="table align-bottom">
-    <thead>
-    <tr className="align-middle d-flex flex-row">
-      <th className="col-4"><h1 className="text-center mb-5 pt-5">InvoSmart</h1></th>
-      <th className="col-3"><AccountButton /></th>
-      <th><InvoiceHistoryButton/></th>
-      <th><Logout /></th>
-      </tr>
-      </thead>
-      </table>
-      </div>
+      {isMobile ? (
+        <div className="mobile-header">
+          <h1 className="mobile-title">InvoSmart</h1>
+          <AccountButton />
+          <InvoiceHistoryButton />
+          <Logout />
+        </div>
+      ) : (
+        <div className="table-responsive">
+          <table className="table align-bottom">
+            <thead>
+              <tr className="align-middle d-flex flex-row">
+                <th className="col-4">
+                  <h1 className="text-center mb-5 pt-5">InvoSmart</h1>
+                </th>
+                <th className="col-3">
+                  <AccountButton />
+                </th>
+                <th>
+                  <InvoiceHistoryButton />
+                </th>
+                <th>
+                  <Logout />
+                </th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+      )}
       <InvoiceForm onReview={handleReview} />
       {/* Dialog for Invoice Preview */}
       <InvoiceDialog

@@ -21,7 +21,7 @@ const InvoicePreview = ({ reviewData, userInfo }) => {
 
 // Component to display client information
 const ClientInfo = ({ userInfo }) => (
-    <div className="row d-flex justify-content-between mb-5">
+    <div className="UserInfo-Container row d-flex justify-content-between mb-5">
       <div className="col-5 position mb-3">
         <h5 className="text-start fw-bold">{userInfo.CompanyAddress}</h5>
         <h5 className="text-start fw-bold">
@@ -39,7 +39,7 @@ const ClientInfo = ({ userInfo }) => (
   // Component to display invoice header information
 const InvoiceHeader = ({ reviewData }) => (
   <div>
-    <div className="divider py-1 mb-2 bg-dark">
+    <div className="InvoiceHeader-Container divider py-1 mb-2 bg-dark">
       <div className="d-flex flex-row">
         <div className="flex-col">
           <h3 className="ps-3 text-white">Invoice No.</h3>

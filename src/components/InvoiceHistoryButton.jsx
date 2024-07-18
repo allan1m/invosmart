@@ -20,8 +20,8 @@ function InvoiceHistoryButton() {
   }
   return (
     <form onSubmit={handleInvoiceHistoryClick}>
-        <div className="d-flex flex-row-reverse position-relative pb-0">
-            <button className="position-relative ps-5 pe-5 mt-3 btn btn-dark" type="submit">
+        <div className="history-container d-flex flex-row-reverse position-relative pb-0">
+            <button className="history-button position-relative ps-5 pe-5 mt-3 btn btn-dark" type="submit">
               History
             </button>
         </div>

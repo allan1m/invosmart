@@ -21,8 +21,8 @@ const TotalDue = ({ total, dueDate, setDueDate }) => (
             onChange={(event) => setDueDate(event.target.value)} // Updates dueDate state on input change
           />
         </fieldset>
-        <div className="col-2 text-left">
-          <p className="fw-bold">Total Due by Date</p>
+        <div className="col-1 text-left fw-bold">
+          <p className="fw-bold">Due</p>
         </div>
       </div>
     </div>

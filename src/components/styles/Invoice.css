@@ -1,40 +1,138 @@
 .container {
-    max-height: 95vh; /* Adjust the value as needed */
-    overflow-y: auto;
+  max-height: 95vh; /* Adjust the value as needed */
+  overflow-y: auto;
 }
 
-#clientAddress, #clientCityState, #clientPhoneNum, #clientEmail, #slogan{
-    height: 20%;
-    text-align: center;
-
+#clientAddress,
+#clientCityState,
+#clientPhoneNum,
+#clientEmail,
+#slogan {
+  height: 20%;
+  text-align: center;
 }
 
-.container .form-control{
-    height: 40%;
-    padding: 10px;
-    text-align: center;
-
+.container .form-control {
+  height: 40%;
+  padding: 10px;
+  text-align: center;
 }
 
-#invoiceNumber{
-    width: 40%;
+#invoiceNumber {
+  width: 40%;
 }
 
-.main-invoice-form input[type=text]::placeholder{
-    text-align: left;
+.main-invoice-form input[type="text"]::placeholder {
+  text-align: left;
 }
 
-input .form-control{
-    direction: rtl;
+input .form-control {
+  direction: rtl;
 }
 
-#items input[type=text]::placeholder{
-    text-align: left;
+#items input[type="text"]::placeholder {
+  text-align: left;
 }
 
+/* Mobile Header Styles */
+.mobile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
 
-@media screen and (max-width: 700px){
-    .container, .container form{
-        width: 95%;
-    }
+.mobile-title {
+  margin-bottom: 10px;
+}
+
+@media screen and (max-width: 1000px) {
+  .container,
+  .container form {
+    width: 95%;
+  }
+
+  /* USER INFO*/
+  .table-responsive {
+    display: none;
+  }
+
+  /* ACCOUNT BUTTON */
+  .account-form-button .account-container {
+    justify-content: center; 
+  }
+
+  /* HISTORY BUTTON */
+  .history-container {
+    justify-content: center; 
+  }
+  /* LOGOUT BUTTON */
+  .logout-container{
+    justify-content: center;
+  }
+  .row h5 {
+    font-size: 0.875rem; 
+  }
+
+  .text-start {
+    padding-left: 1.5rem; 
+  }
+
+  /* INVOICE NO. INVOICE DATE */
+  .divider h3,
+  .divider h2 {
+    font-size: 1rem; 
+  }
+
+  .ps-3 {
+    padding-left: 0.5rem; 
+  }
+
+  .pe-5 {
+    padding-right: 0.625rem; 
+  }
+
+  /* BILLING INFO */
+  .row h3 {
+    font-size: 1rem; 
+  }
+
+  .form-control {
+    font-size: 0.875rem; /* Adjust font size for input boxes */
+    padding: 0.5rem; 
+  }
+  
+  /* ITEMS HEADER */
+  #itemsHeader p {
+    font-size: 0.875rem; 
+  }
+
+  .form-control {
+    font-size: 0.75rem; 
+    padding: 0.25rem; /* Adjust padding for input boxes */
+  }
+
+  #delete {
+    font-size: 1.5rem; /* Adjust font size for the dash */
+    padding: 0.25rem 0.5rem; /* Adjust padding for the dash button */
+    background-color: transparent; /* Remove background color */
+    color: transparent; /* Set text color to red */
+  }
+
+  #delete::before {
+    content: "−"; /* Display dash symbol */
+    color: red;
+  }
+
+  #addItem {
+    font-size: 1.5rem; /* Adjust font size for the plus sign */
+    padding: 0.25rem 0.5rem; /* Adjust padding for the plus button */
+    background-color: transparent; /* Remove background color */
+    color: transparent; /* Set text color to green */
+  }
+
+  #addItem::before {
+    content: "+"; /* Display plus symbol */
+    color: green;
+  }
 }

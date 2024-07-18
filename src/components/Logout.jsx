@@ -28,8 +28,8 @@ function Logout() {
   }
   return (
     <form onSubmit={handleLogout}>
-        <div className="d-flex flex-row-reverse position-relative pb-0">
-            <button className="position-relative ps-5 pe-5 mt-3 btn btn-dark" type="submit">
+        <div className="logout-container d-flex flex-row-reverse position-relative pb-0">
+            <button className="logout-button position-relative ps-5 pe-5 mt-3 btn btn-dark" type="submit">
               Log Out
             </button>
         </div>

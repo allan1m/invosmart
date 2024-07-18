@@ -74,8 +74,8 @@ function Login() {
       console.log("Try Statement: 1-1");
       // Send a POST request to the authentication endpoint
       const response = await fetch(
-        // "https://invosmart-be.azurewebsites.net/api/auth/Authentication/LoginClient",
-        "http://localhost:5073/api/auth/Authentication/LoginClient",
+        "https://invosmart-be.azurewebsites.net/api/auth/Authentication/LoginClient",
+        // "http://localhost:5073/api/auth/Authentication/LoginClient",
         {
           method: "POST",
           headers: {
