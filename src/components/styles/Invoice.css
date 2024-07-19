@@ -163,4 +163,37 @@ input .form-control {
   .billing-info .col input {
     margin-bottom: 1rem;
   }
+
+  /* ITEMS HEADER */
+  .itemsHeader p{
+    display: none;
+  }
+
+  /* ITEMS LIST */
+  #items{
+    flex-direction: column !important;
+  }
+  .items .description-container{
+    width: 100%;
+  }
+  .items .address-container{
+    width: 100%;
+  }
+  .items .qty-container{
+    width: 100%;
+  }
+  .items .qty-container input{
+    width: 100% !important;
+  }
+  .items .unitPrice-container input{
+    width: 100% !important;
+  }
+
+  /* TOTAL DUE */
+  .totalDue .dueDate-container .row{
+    justify-content: center;
+  }
+  .totalDue .total-display-container .row{
+    justify-content: center;
+  }
 }

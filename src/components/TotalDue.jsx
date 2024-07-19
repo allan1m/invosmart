@@ -5,9 +5,9 @@ import React from "react";
  * This component displays the total amount due and allows the user to set the due date.
  */
 const TotalDue = ({ total, dueDate, setDueDate }) => (
-  <div>
+  <div className="totalDue">
     {/* First Divider for Due Date */}
-    <div className="divider py-1 mt-3">
+    <div className="dueDate-container divider py-1 mt-3">
       <div className="row d-flex flex-row-reverse">
         <fieldset className="col-2 text-center pe-3">
           {/* Input field for the due date */}
@@ -21,13 +21,13 @@ const TotalDue = ({ total, dueDate, setDueDate }) => (
             onChange={(event) => setDueDate(event.target.value)} // Updates dueDate state on input change
           />
         </fieldset>
-        <div className="col-1 text-left fw-bold">
+        <div className="due-container col-1 text-left fw-bold">
           <p className="fw-bold">Due</p>
         </div>
       </div>
     </div>
     {/* Second Divider for Total Amount */}
-    <div className="divider py-1 mb-5">
+    <div className="total-display-container divider py-1 mb-5">
       <div className="row d-flex flex-row-reverse">
         <fieldset disabled className="col-2 text-center pe-3">
           {/* Input field for displaying the total amount */}
@@ -38,7 +38,7 @@ const TotalDue = ({ total, dueDate, setDueDate }) => (
             value={total} // Sets the value of the input field to the total prop
           />
         </fieldset>
-        <div className="col-1 text-left fw-bold">Total</div>
+        <div className="total-display col-1 text-left fw-bold">Total</div>
       </div>
     </div>
   </div>

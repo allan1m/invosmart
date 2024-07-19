@@ -23,9 +23,6 @@ function Login() {
   const [notificationMessage, setNotificationMessage] = useState("");
   const [notificationSeverity, setNotificationSeverity] = useState("success");
 
-  // State to manage visibility of links based on screen size
-  const [showLinks, setShowLinks] = useState(true);
-
   // useNavigate hook to programmatically navigate users
   const navigate = useNavigate(); // Hook for navigation
 
@@ -145,26 +142,6 @@ function Login() {
     setNotificationOpen(false);
   };
 
-  // Function to handle screen size change and update state
-  const handleResize = () => {
-    if (window.innerWidth < 550) {
-      setShowLinks(false);
-    } else {
-      setShowLinks(true);
-    }
-  };
-
-  // Effect to set initial state and listen for resize events
-  useEffect(() => {
-    handleResize(); // Set initial state
-
-    window.addEventListener("resize", handleResize); // Listen for resize events
-
-    return () => {
-      window.removeEventListener("resize", handleResize); // Clean up event listener
-    };
-  }, []);
-
   return (
     <div className="login template d-flex justify-content-center align-items-center w-100 vh-100 bg-dark">
       <div className="form-container p-5 rounded bg-white">
@@ -220,16 +197,12 @@ function Login() {
               {notificationMessage}
             </Alert>
           </Snackbar>
-          {showLinks && (
-            <>
-              <p className="text-end mt-2">
-                Forgot <a href="">Password?</a>
-              </p>
-              <p className="text-end mt-2">
-                Don't have an account? <Link to="./Signup">Sign up</Link>
-              </p>
-            </>
-          )}
+          <p className="text-end mt-2">
+            Forgot <a href="">Password?</a>
+          </p>
+          <p className="text-end mt-2 mb-0 pb-0">
+            Don't have an account? <Link to="./Signup">Sign up</Link>
+          </p>
         </form>
       </div>
     </div>

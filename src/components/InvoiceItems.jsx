@@ -1,4 +1,5 @@
 import React from "react";
+import styles from "./styles/Invoice.css";
 
 /**
  * INVOICE ITEMS
@@ -7,7 +8,7 @@ import React from "react";
 const InvoiceItems = ({ items, handleItemChange, deleteItem, addItem }) => (
   <div>
   {/* Header for the items list */}
-    <div id="itemsHeader" className="divider py-1 mb-2 bg-dark">
+    <div id="itemsHeader" className="itemsHeader divider py-1 mb-2 bg-dark">
       <div className="d-flex flex-row">
         <div className="col-3 me-2">
           <p className="text-white ps-3">Description</p>
@@ -25,9 +26,9 @@ const InvoiceItems = ({ items, handleItemChange, deleteItem, addItem }) => (
     </div>
     {/* Mapping over items array to render each item's input fields */}
     {items.map((item, index) => (
-      <div id="items" className="d-flex flex-row justify-content-between" key={index}>
+      <div id="items" className="items d-flex flex-row justify-content-between" key={index}>
       {/* Description input field */}
-        <div className="col-3 me-4">
+        <div className="description-container col-3 me-4">
           <input
             type="text"
             id={`description-${index}`}
@@ -41,7 +42,7 @@ const InvoiceItems = ({ items, handleItemChange, deleteItem, addItem }) => (
           />
         </div>
         {/* Address input field */}
-        <div className="col-3 me-5">
+        <div className="address-container col-3 me-5">
           <input
             type="text"
             id={`address-${index}`}
@@ -55,7 +56,7 @@ const InvoiceItems = ({ items, handleItemChange, deleteItem, addItem }) => (
           />
         </div>
         {/* Quantity input field */}
-        <div className="col-2 me-4">
+        <div className="qty-container col-2 me-4">
           <input
             type="text"
             id={`qty-${index}`}
@@ -67,7 +68,7 @@ const InvoiceItems = ({ items, handleItemChange, deleteItem, addItem }) => (
           />
         </div>
         {/* Unit Price input field */}
-        <div className="col-">
+        <div className="unitPrice-container col-">
           <input
             type="text"
             id={`unitPrice-${index}`}
@@ -81,7 +82,7 @@ const InvoiceItems = ({ items, handleItemChange, deleteItem, addItem }) => (
           />
         </div>
         {/* Delete button for removing the item */}
-        <div className="col d-flex flex-row align-items-start ms-2">
+        <div className="delete-container col d-flex flex-row align-items-start ms-2">
           <button
             id="delete"
             className="fw-bold btn btn-danger border-0"
@@ -93,7 +94,7 @@ const InvoiceItems = ({ items, handleItemChange, deleteItem, addItem }) => (
       </div>
     ))}
     {/* Button to add a new item */}
-    <div className="d-flex">
+    <div className="add-container d-flex">
       <button
         id="addItem"
         className="fw-bold btn btn-primary ps-3 pe-3 border-0"
