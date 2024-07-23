@@ -47,6 +47,19 @@ input .form-control {
 }
 
 @media screen and (max-width: 1000px) {
+  
+  .account-button{
+    width: 25%;
+    font-size: 0.875rem !important; 
+    justify-content: center !important;
+  }
+
+  .invoice-button{
+    width: 50%;
+    font-size: 0.875rem !important; 
+    justify-content: center;
+  }
+  
   .container,
   .container form {
     width: 95%;

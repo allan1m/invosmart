@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Layout from "./Layout";
 import AccountButton from "./AccountButton";
 import InvoiceButton from "./InvoiceButton";
+import styles from "./styles/History.css";
 
 /**
  * INVOICE HISTORY
@@ -82,43 +83,44 @@ function InvoiceHistory() {
           </div>
         </div>
         <h3 className="text-left mb-3">Invoice History for {company}</h3>
-        <div className="table-responsive">
-          {invoices.length > 0 ? (
-            <table className="table table-striped table-sm align-middle">
-              <thead className="table-primary">
-                <tr>
-                  <th className="column-1">Invoice Number</th>
-                  <th className="column-2">Invoice Date</th>
-                  <th className="column-3">Due Date</th>
-                  <th className="column-4">Billed To</th>
-                  <th className="column-5">Billing Address</th>
-                  <th className="column-6">Payable To</th>
-                  <th className="column-7">Services</th>
-                  <th className="column-8">Subtotal</th>
-                  <th className="column-9">Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                {/* Map over fetched invoices to display each invoice */}
-                {invoices.map((invoice) => (
-                  <tr key={invoice.InvoiceID}>
-                    <td>{invoice.InvoiceNumber}</td>
-                    <td>{invoice.InvoiceDate}</td>
-                    <td>{invoice.DueDate}</td>
-                    <td>{invoice.BilledToEntityName}</td>
-                    <td>{invoice.BilledToEntityAddress}</td>
-                    <td>{invoice.PayableTo}</td>
-                    <td>{invoice.ServicesRendered}</td>
-                    <td>{invoice.SubTotal}</td>
-                    <td>{invoice.Total}</td>
-                    {/* Add more columns as necessary */}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <p>No invoices available.</p>
-          )}
+        <div className="flex-table">
+          <div className="flex-table-header">
+            <div className="flex-table-cell">Invoice Number</div>
+            <div className="flex-table-cell">Invoice Date</div>
+            <div className="flex-table-cell">Due Date</div>
+            <div className="flex-table-cell">Billed To</div>
+            <div className="flex-table-cell">Billing Address</div>
+            <div className="flex-table-cell">Payable To</div>
+            <div className="flex-table-cell">Services</div>
+            <div className="flex-table-cell">Subtotal</div>
+            <div className="flex-table-cell">Total</div>
+          </div>
+          <div className="flex-table-body">
+            {/* Map over fetched invoices to display each invoice */}
+            {invoices.length > 0 ? (
+              invoices.map((invoice) => (
+                <div className="flex-table-row" key={invoice.InvoiceID}>
+                  <div className="flex-table-cell">{invoice.InvoiceNumber}</div>
+                  <div className="flex-table-cell">{invoice.InvoiceDate}</div>
+                  <div className="flex-table-cell">{invoice.DueDate}</div>
+                  <div className="flex-table-cell">
+                    {invoice.BilledToEntityName}
+                  </div>
+                  <div className="flex-table-cell">
+                    {invoice.BilledToEntityAddress}
+                  </div>
+                  <div className="flex-table-cell">{invoice.PayableTo}</div>
+                  <div className="flex-table-cell">
+                    {invoice.ServicesRendered}
+                  </div>
+                  <div className="flex-table-cell">{invoice.SubTotal}</div>
+                  <div className="flex-table-cell">{invoice.Total}</div>
+                </div>
+              ))
+            ) : (
+              <p>No invoices available.</p>
+            )}
+          </div>
         </div>
       </div>
     </Layout>

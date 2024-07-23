@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import styles from "./styles/Invoice.css";
 
 // This component represents a button to navigate back to the Invoice page.
 function InvoiceButton() {
@@ -14,12 +15,12 @@ function InvoiceButton() {
   }
   return (
     <form onSubmit={handleInvoiceClick}>
-      <div className="d-flex flex-row-reverse position-relative pb-0">
+      <div className="invoice-button-container d-flex flex-row-reverse position-relative pb-0">
         <button
-          className="position-relative ps-5 pe-5 mt-3 btn btn-dark"
+          className="invoice-button position-relative ps-5 pe-5 mt-3 btn btn-dark"
           type="submit"
         >
-          Back to Invoice
+          Invoice
         </button>
       </div>
     </form>
